@@ -21,9 +21,13 @@
   <ItemGroup>
     <None Remove="Entities\" />
     <None Remove="Interfaces\" />
+    <None Remove="Data\" />
+    <None Remove="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Data\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 </Project>
