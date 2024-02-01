@@ -8,6 +8,7 @@ namespace DAL.Interfaces
 		IImageRepository ImageRepository { get; }
 		IManufacturerRepository ManufacturerRepository { get; }
 		IProductRepository ProductRepository { get; }
+		Task SaveAsync();
 	}
 }
 
