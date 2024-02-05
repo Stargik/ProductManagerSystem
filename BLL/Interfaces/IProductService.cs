@@ -4,8 +4,14 @@ using DAL.Entities;
 
 namespace BLL.Interfaces
 {
-	public interface IProductService : ICrud<Product>
+	public interface IProductService
 	{
+        Task AddAsync(ProductDTO productDTO);
+        Task UpdateAsync(ProductDTO productDTO);
+        Task DeleteByIdAsync(int id);
+        Task DeleteAsync(ProductDTO productDTO);
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task<Product> GetByIdAsync(int id);
         Task<IEnumerable<Product>> GetByFilterAsync(FilterSearchModel filterSearch);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         Task AddCategoryAsync(Category category);
