@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DAL.Entities
 {
 	public class Product : BaseEntity
@@ -10,7 +12,8 @@ namespace DAL.Entities
         public int StockStatusId { get; set; }
         public int СurrencyTypeId { get; set; }
         public int CategoryId { get; set; }
-        public int MainImageId { get; set; }
+        [ForeignKey("MainImage")]
+        public int? MainImageId { get; set; }
         public int ManufacturerId { get; set; }
 
         public StockStatus StockStatus { get; set; }
@@ -18,6 +21,7 @@ namespace DAL.Entities
         public Category Category { get; set; }
         public Image MainImage { get; set; }
         public Manufacturer Manufacturer { get; set; }
+        [InverseProperty("Product")]
         public List<Image> Images { get; set; }
         public List<Characteristic> Characteristics { get; set; }
 

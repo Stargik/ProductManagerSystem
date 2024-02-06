@@ -21,11 +21,19 @@ namespace DAL.Data
 		public DbSet<Product> Products { get; set; }
 		public DbSet<StockStatus> StockStatuses { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new CurrencyTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new StockStatusConfiguration());
+            modelBuilder.ApplyConfiguration(new StockStatusConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }
+
     }
 }
 
