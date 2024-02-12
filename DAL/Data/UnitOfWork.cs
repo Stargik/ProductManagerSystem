@@ -18,6 +18,8 @@ namespace DAL.Data
         private IImageRepository imageRepository;
         private IManufacturerRepository manufacturerRepository;
         private IProductRepository productRepository;
+        private ICurrencyTypeRepository currencyTypeRepository;
+        private IStockStatusRepository stockStatusRepository;
 
         public ICategoryRepository CategoryRepository
         {
@@ -76,6 +78,30 @@ namespace DAL.Data
                     productRepository = new ProductRepository(context);
                 }
                 return productRepository;
+            }
+        }
+
+        public ICurrencyTypeRepository CurrencyTypeRepository
+        {
+            get
+            {
+                if (currencyTypeRepository is null)
+                {
+                    currencyTypeRepository = new CurrencyTypeRepository(context);
+                }
+                return currencyTypeRepository;
+            }
+        }
+
+        public IStockStatusRepository StockStatusRepository
+        {
+            get
+            {
+                if (stockStatusRepository is null)
+                {
+                    stockStatusRepository = new StockStatusRepository(context);
+                }
+                return stockStatusRepository;
             }
         }
 

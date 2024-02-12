@@ -1,0 +1,63 @@
+﻿@model DAL.Entities.Product
+
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+    <a class="btn btn-outline-dark" asp-action="Index">Back to List</a>
+<hr />
+<div class="row g-5">
+    <div class="col-md-12">
+        <h1>@Html.DisplayFor(model => model.Title)</h1>
+    </div>
+    <div class="col-md-12">
+        <p><img class="shadow-sm p-3 rounded" style="max-height: 300px;" src="@(ViewData["ImageStoragePath"] + "/" + Model.MainImage.Path)" asp-append-version="true"></p>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <td class="text-muted">@Html.DisplayNameFor(model => model.ManufacturerCode)</td>
+                    <td>@Html.DisplayFor(model => model.ManufacturerCode)</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">@Html.DisplayNameFor(model => model.Price)</td>
+                    <td>@Html.DisplayFor(model => model.Price) @Html.DisplayFor(model => model.CurrencyType.Name)</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">@Html.DisplayNameFor(model => model.StockStatus)</td>
+                    <td>@Html.DisplayFor(model => model.StockStatus.Name)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <h4>@Html.DisplayNameFor(model => model.Description)</h4>
+        <hr />
+        <div>
+            @Html.DisplayFor(model => model.Description)
+        </div>
+    </div>
+    <div class="col-md-12">
+        @if (Model.Characteristics.Count != 0)
+        {
+            <h4>@Html.DisplayNameFor(model => model.Characteristics)</h4>
+            <hr />
+            <div>
+                <table class="table table-borderless">
+                    <tbody>
+                        @foreach (Characteristic item in Model.Characteristics)
+                        {
+                            <tr>
+                                <td class="text-muted">@Html.DisplayFor(model => item.Name)</td>
+                                <td>@Html.DisplayFor(model => item.ValueNumber) @Html.DisplayFor(model => item.UnitType)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+</div>

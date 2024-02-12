@@ -1,0 +1,36 @@
+﻿@model DAL.Entities.Characteristic
+
+
+@{
+    ViewData["Title"] = "Перегляд";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Характеристика</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ValueNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ValueNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UnitType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UnitType)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a> |
+    <a asp-action="Index" asp-route-productid="@Model?.ProductId">Назад до списку</a>
+</div>

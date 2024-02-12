@@ -71,6 +71,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ValueNumber = table.Column<double>(type: "float", nullable: false),
                     UnitType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
@@ -87,7 +88,6 @@ namespace DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MainProductId = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -106,11 +106,10 @@ namespace DAL.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ManufacturerCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StockStatusId = table.Column<int>(type: "int", nullable: false),
-                    СurrencyTypeId = table.Column<int>(type: "int", nullable: false),
+                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     MainImageId = table.Column<int>(type: "int", nullable: true),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: false),
-                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false)
+                    ManufacturerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -131,8 +130,7 @@ namespace DAL.Migrations
                         name: "FK_Products_Images_MainImageId",
                         column: x => x.MainImageId,
                         principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Products_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -192,9 +190,7 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Products_MainImageId",
                 table: "Products",
-                column: "MainImageId",
-                unique: true,
-                filter: "[MainImageId] IS NOT NULL");
+                column: "MainImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ManufacturerId",

@@ -2,16 +2,16 @@
 using DAL.Configuration;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DAL.Data
 {
 	public class ProductManagerDbContext : DbContext
 	{
 		public ProductManagerDbContext(DbContextOptions<ProductManagerDbContext> options)
-			: base(options)
+        : base(options)
 		{
-
-		}
+        }
 
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<Characteristic> Characteristics { get; set; }
@@ -31,7 +31,6 @@ namespace DAL.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new CurrencyTypeConfiguration());
             modelBuilder.ApplyConfiguration(new StockStatusConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }
 
     }

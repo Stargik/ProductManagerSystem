@@ -35,7 +35,7 @@ namespace DAL.Repositories
                 .Include(p => p.CurrencyType)
                 .Include(p => p.Category)
                 .Include(p => p.Manufacturer)
-                .Include(p => p.StockStatus)
+                .Include(p => p.StockStatus).AsNoTracking()
                 .SingleOrDefaultAsync(p => p.Id == id);
         }
     }

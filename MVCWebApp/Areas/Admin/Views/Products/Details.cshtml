@@ -1,0 +1,45 @@
+﻿@model DAL.Entities.Product
+
+
+@{
+    ViewData["Title"] = "Перегляд";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Товар</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <a class="btn btn-outline-dark" asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a>
+    <a class="btn btn-outline-dark" asp-action="Index">Назад до списку</a>
+</div>
+<hr />
+
+<div class="row g-3">
+    <div class="col-md-12">
+        <h2>@Html.DisplayFor(model => model.Title)</h2>
+    </div>
+    <div class="col-md-4">
+        <p><img style="max-height: 200px;" src="@(ViewData["ImageStoragePath"] + "/" + Model.MainImage.Path)" asp-append-version="true"></p>
+        <p>@Html.DisplayFor(model => model.Description)</p>
+    </div>
+    <div class="col-md-4">
+        @if (Model.Characteristics.Count != 0)
+        {
+            <h6>@Html.DisplayNameFor(model => Model.Characteristics)</h6>
+            <ul class="list-group">
+                @foreach (Characteristic item in Model.Characteristics)
+                {
+                    <li class="list-group-item">@Html.DisplayFor(model => item.Name): @Html.DisplayFor(model => item.ValueNumber) @Html.DisplayFor(model => item.UnitType)</li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="col-md-4">
+        <h6>Загальна інформація</h6>
+        <ul class="list-group">
+            <li class="list-group-item">@Html.DisplayNameFor(model => model.ManufacturerCode): @Html.DisplayFor(model => model.ManufacturerCode)</li>
+            <li class="list-group-item">@Html.DisplayNameFor(model => model.Price): @Html.DisplayFor(model => model.Price) @Html.DisplayFor(model => model.CurrencyType.Name)</li>
+            <li class="list-group-item">@Html.DisplayNameFor(model => model.StockStatus): @Html.DisplayFor(model => model.StockStatus.Name)</li>
+        </ul>
+    </div>
+</div>

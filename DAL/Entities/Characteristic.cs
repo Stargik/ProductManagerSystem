@@ -1,13 +1,21 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace DAL.Entities
 {
 	public class Characteristic : BaseEntity
 	{
-		public double ValueNumber { get; set; }
-		public string UnitType { get; set; }
-		public int ProductId { get; set; }
+        [Display(Name = "Назва")]
+        public string Name { get; set; }
+        [Display(Name = "Значення")]
+        public string ValueNumber { get; set; }
+        [Display(Name = "Одиниця виміру")]
+        public string? UnitType { get; set; }
+        [Display(Name = "Товар")]
+        public int ProductId { get; set; }
 
-		public Product Product { get; set; }
+        [Display(Name = "Товар")]
+        public Product? Product { get; set; } 
 	}
 }
 

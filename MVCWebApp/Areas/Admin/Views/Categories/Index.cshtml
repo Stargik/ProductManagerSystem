@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DAL.Entities.Category>
+
+@{
+    ViewData["Title"] = "Категорії";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <a class="btn btn-outline-dark" asp-action="Create">Створити</a>
+</div>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
+                        <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
+                        <a class="btn btn-outline-secondary" asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

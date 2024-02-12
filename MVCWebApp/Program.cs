@@ -4,6 +4,10 @@ using MVCWebApp.Areas.Identity.Data;
 using DAL.Data;
 using BLL.Configuration;
 using MVCWebApp.Configuration;
+using DAL.Interfaces;
+using BLL.Interfaces;
+using BLL.Services;
+using Microsoft.Extensions.Options;
 
 namespace MVCWebApp;
 
@@ -26,6 +30,15 @@ public class Program
 
         builder.Services.Configure<StaticFilesSettings>(builder.Configuration.GetSection(SettingStrings.StaticFilesSection));
 
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddTransient<IManufacturerService, ManufacturerService>();
+        builder.Services.AddTransient<IProductService, ProductService>();
+        builder.Services.AddTransient<IImageService, FilesystemImageService>(
+            serviceProvider => new FilesystemImageService(
+                    serviceProvider.GetRequiredService<IOptions<StaticFilesSettings>>(),
+                    serviceProvider.GetService<IWebHostEnvironment>().WebRootPath
+            )
+        );
 
         builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ProductManagerDbContext>();
 
@@ -49,6 +62,10 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+
+        app.MapControllerRoute(
+            name: "Admin",
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
         app.MapControllerRoute(
             name: "default",

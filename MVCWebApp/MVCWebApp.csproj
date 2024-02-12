@@ -12,6 +12,13 @@
   <ItemGroup>
     <None Remove="Areas\Identity\Configuration\" />
     <None Remove="Configuration\" />
+    <None Remove="Views\Manufacturers\" />
+    <None Remove="Views\Categories\" />
+    <None Remove="Views\Characteristics\" />
+    <None Remove="Views\Products\" />
+    <None Remove="Areas\Admin\" />
+    <None Remove="Areas\Admin\Views\" />
+    <None Remove="Areas\Admin\Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
@@ -27,6 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
   </ItemGroup>
 
@@ -41,5 +49,16 @@
   <ItemGroup>
     <Folder Include="Areas\Identity\Configuration\" />
     <Folder Include="Configuration\" />
+    <Folder Include="Views\Manufacturers\" />
+    <Folder Include="Views\Categories\" />
+    <Folder Include="Views\Characteristics\" />
+    <Folder Include="Views\Products\" />
+    <Folder Include="wwwroot\Images\" />
+    <Folder Include="Areas\Admin\" />
+    <Folder Include="Areas\Admin\Views\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\Images\" />
   </ItemGroup>
 </Project>

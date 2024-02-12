@@ -9,7 +9,6 @@ namespace DAL.Configuration
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasOne(p => p.MainImage).WithOne(i => i.MainProduct).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<DAL.Entities.Characteristic>
+
+@{
+    ViewData["Title"] = "Характеристики";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>@ViewData["Title"]</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValueNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValueNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitType)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-productid="@item.ProductId">Редагувати</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Докладніше</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.ProductId">ПОвернутися до товару</a>
+    <a asp-action="Create" asp-route-courceid="@ViewBag.ProductId">Створити</a>
+</p>

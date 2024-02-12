@@ -1,0 +1,24 @@
+﻿@model DAL.Entities.Characteristic
+
+@{
+    ViewData["Title"] = "Видалити";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Видалити характеристику</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="deleteForm" value="Видалити" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-controller="Products" asp-action="Edit" asp-route-id="@Model?.ProductId">Скасувати</a>
+</div>
+<hr />
+<h3>Ви справді хочете видалити характеристику?</h3>
+<div>
+    <p>
+        @Html.DisplayFor(model => model.Name): @Html.DisplayFor(model => model.ValueNumber) @Html.DisplayFor(model => model.UnitType)
+    </p>
+
+    <form asp-action="Delete" id="deleteForm">
+        <input type="hidden" asp-for="Id" />
+    </form>
+</div>

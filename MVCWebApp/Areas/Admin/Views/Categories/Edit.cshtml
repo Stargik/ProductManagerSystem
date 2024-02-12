@@ -1,0 +1,31 @@
+﻿@model DAL.Entities.Category
+
+@{
+    ViewData["Title"] = "Редагувати";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Редагувати категорію</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="editForm" value="Зберегти" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-action="Index">Скасувати</a>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" id="editForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

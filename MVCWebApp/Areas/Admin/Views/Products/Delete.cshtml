@@ -1,0 +1,50 @@
+﻿@model DAL.Entities.Product
+
+@{
+    ViewData["Title"] = "Видалити";
+}
+
+<h1>Видалити товар</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="deleteForm" value="Видалити" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-action="Index">Скасувати</a>
+</div>
+<hr />
+<h3>Ви справді хочете видалити товар?</h3>
+<hr />
+<div>
+    <div class="row g-3">
+        <div class="col-md-12">
+            <h2>@Html.DisplayFor(model => model.Title)</h2>
+        </div>
+        <div class="col-md-4">
+            <p><img style="max-height: 200px;" src="@(ViewData["ImageStoragePath"] + "/" + Model.MainImage.Path)" asp-append-version="true"></p>
+            <p>@Html.DisplayFor(model => model.Description)</p>
+        </div>
+        <div class="col-md-4">
+            @if (Model.Characteristics.Count != 0)
+            {
+                <h6>Characteristics</h6>
+                <ul class="list-group">
+                    @foreach (Characteristic item in Model.Characteristics)
+                    {
+                        <li class="list-group-item">@Html.DisplayFor(model => item.Name): @Html.DisplayFor(model => item.ValueNumber) @Html.DisplayFor(model => item.UnitType)</li>
+                    }
+                </ul>
+            }
+        </div>
+        <div class="col-md-4">
+            <h6>General information</h6>
+            <ul class="list-group">
+                <li class="list-group-item">@Html.DisplayNameFor(model => model.ManufacturerCode): @Html.DisplayFor(model => model.ManufacturerCode)</li>
+                <li class="list-group-item">@Html.DisplayNameFor(model => model.Price): @Html.DisplayFor(model => model.Price) @Html.DisplayFor(model => model.CurrencyType.Name)</li>
+                <li class="list-group-item">@Html.DisplayNameFor(model => model.StockStatus): @Html.DisplayFor(model => model.StockStatus.Name)</li>
+            </ul>
+        </div>
+    </div>
+
+    <form asp-action="Delete" id="deleteForm">
+        <input type="hidden" asp-for="Id" />
+    </form>
+</div>

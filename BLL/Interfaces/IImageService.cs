@@ -8,6 +8,7 @@ namespace BLL.Interfaces
 	{
         public Task Upload(IFormFile imgFile);
         public Task<IFormFile> Download(string imgName);
+        public Task Remove(string imgName);
         public Task<string> GetStoragePath();
     }
 }

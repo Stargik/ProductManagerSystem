@@ -47,15 +47,19 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("UnitType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("ValueNumber")
-                        .HasColumnType("float");
+                    b.Property<string>("ValueNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -105,9 +109,6 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("MainProductId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Path")
                         .IsRequired()
@@ -178,18 +179,13 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("СurrencyTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CurrencyTypeId");
 
-                    b.HasIndex("MainImageId")
-                        .IsUnique()
-                        .HasFilter("[MainImageId] IS NOT NULL");
+                    b.HasIndex("MainImageId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -285,9 +281,8 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("DAL.Entities.Image", "MainImage")
-                        .WithOne("MainProduct")
-                        .HasForeignKey("DAL.Entities.Product", "MainImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("MainImageId");
 
                     b.HasOne("DAL.Entities.Manufacturer", "Manufacturer")
                         .WithMany("Products")
@@ -320,12 +315,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.CurrencyType", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("DAL.Entities.Image", b =>
-                {
-                    b.Navigation("MainProduct")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DAL.Entities.Manufacturer", b =>

@@ -50,7 +50,7 @@ namespace DAL.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-            var oldEntity = await context.Set<T>().FirstOrDefaultAsync(t => t.Id == entity.Id);
+            var oldEntity = await context.Set<T>().AsNoTracking().FirstOrDefaultAsync(t => t.Id == entity.Id);
             if (oldEntity is not null)
             {
                 context.Set<T>().Update(entity);

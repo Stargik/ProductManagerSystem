@@ -1,12 +1,17 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace DAL.Entities
 {
 	public class StockStatus : BaseEntity
 	{
-		public string Name { get; set; }
-		public int StatusCode { get; set; }
+        [Display(Name = "Заголовок")]
+        public string Name { get; set; }
+        [Display(Name = "Код")]
+        public int StatusCode { get; set; }
 
-		public List<Product> Products { get; set; }
+        [Display(Name = "Товари")]
+        public List<Product> Products { get; set; }
 	}
 }
 

@@ -1,0 +1,87 @@
+﻿@model ProductsViewModel
+
+@{
+    ViewData["Title"] = @ViewBag.CategoryName;
+    var product = new Product();
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<form method="get" asp-action="Index" id="filterForm" class="row g-3">
+    <div class="col">
+        <label asp-for="SearchTitle" class="visually-hidden"></label>
+        <input asp-for="SearchTitle" id="SearchTitle" placeholder="Пошук" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <label asp-for="SearchCategoryId" class="visually-hidden"></label>
+        <select asp-for="SearchCategoryId" id="SearchCategoryId" name="SearchCategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+    </div>
+    <div class="col-auto">
+        <label asp-for="SearchManufacturerId" class="visually-hidden"></label>
+        <select asp-for="SearchManufacturerId" id="SearchManufacturerId" name="SearchManufacturerId" class="form-select" asp-items="ViewBag.ManufacturerId"></select>
+    </div>
+    <div class="col-auto">
+        <input type="submit" form="filterForm" value="Знайти" class="btn btn-secondary" />
+    </div>
+</form>
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => product.MainImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => product.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => product.ManufacturerCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => product.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => product.Manufacturer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => product.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => product.StockStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    <img style="max-height: 100px;" src="@(ViewData["ImageStoragePath"] + "/" + item.MainImage.Path)" asp-append-version="true">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManufacturerCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Manufacturer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.CurrencyType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StockStatus.Name)
+                </td>
+                <td>
+                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

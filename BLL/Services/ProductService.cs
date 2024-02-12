@@ -33,6 +33,8 @@ namespace BLL.Services
         public async Task DeleteAsync(ProductDTO productDTO)
         {
             var product = await GetProductFromDTO(productDTO);
+            await imageService.Remove(product.MainImage.Path);
+            await unitOfWork.ImageRepository.DeleteByIdAsync((int)product.MainImageId);
 
             await productRepository.DeleteAsync(product);
             await unitOfWork.SaveAsync();
@@ -40,6 +42,10 @@ namespace BLL.Services
 
         public async Task DeleteByIdAsync(int id)
         {
+            var product = await productRepository.GetByIdWithDetailsAsync(id);
+            await imageService.Remove(product.MainImage.Path);
+            await unitOfWork.ImageRepository.DeleteByIdAsync((int)product.MainImageId);
+
             await productRepository.DeleteByIdAsync(id);
             await unitOfWork.SaveAsync();
         }
@@ -53,7 +59,9 @@ namespace BLL.Services
         public async Task<IEnumerable<Product>> GetByFilterAsync(FilterSearchModel filterSearch)
         {
             var products = await productRepository.GetAllWithDetailsAsync();
-            products = products?.Where(p => p.CategoryId == filterSearch.CategoryId);
+            products = products?.Where(p => (p.CategoryId == filterSearch.CategoryId || filterSearch.CategoryId is null) &&
+                                       (p.ManufacturerId == filterSearch.ManufacturerId || filterSearch.ManufacturerId is null) &&
+                                       (String.IsNullOrEmpty(filterSearch.SearchTitle) || p.Title.ToUpper().Contains(filterSearch.SearchTitle.ToUpper())));
             return products;
         }
 
@@ -72,9 +80,14 @@ namespace BLL.Services
             }
             if (productDTO.MainImage is not null)
             {
+                var oldImg = (await productRepository.GetByIdWithDetailsAsync(productDTO.Id)).MainImage;
+                await imageService.Remove(oldImg.Path);
+
                 await imageService.Upload(productDTO.MainImage);
+                oldImg.Path = product.MainImage.Path;
+                await unitOfWork.ImageRepository.UpdateAsync(oldImg);
             }
-            
+
             await productRepository.UpdateAsync(product);
             await unitOfWork.SaveAsync();
         }
@@ -89,6 +102,12 @@ namespace BLL.Services
         {
             var categories = await unitOfWork.CategoryRepository.GetAllAsync();
             return categories;
+        }
+
+        public async Task<Category> GetCategoryByIdAsync(int id)
+        {
+            var category = await unitOfWork.CategoryRepository.GetByIdAsync(id);
+            return category;
         }
 
         public async Task RemoveCategoryByIdAsync(int categoryId)
@@ -109,6 +128,12 @@ namespace BLL.Services
             return characteristics;
         }
 
+        public async Task<Characteristic> GetCharacteristicByIdAsync(int id)
+        {
+            var characteristic = await unitOfWork.CharacteristicRepository.GetByIdAsync(id);
+            return characteristic;
+        }
+
         public async Task AddCharacteristicAsync(Characteristic characteristic)
         {
             await unitOfWork.CharacteristicRepository.AddAsync(characteristic);
@@ -127,24 +152,56 @@ namespace BLL.Services
             await unitOfWork.SaveAsync();
         }
 
+        public async Task<IEnumerable<StockStatus>> GetAllStockStatusesAsync()
+        {
+            var stockStatuses = await unitOfWork.StockStatusRepository.GetAllAsync();
+            return stockStatuses;
+        }
+
+        public async Task<ProductDTO> GetProductDTOByIdAsync(int id)
+        {
+            var product = await productRepository.GetByIdAsync(id);
+            ProductDTO productDTO = new ProductDTO
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Description = product.Description,
+                Price = product.Price,
+                ManufacturerCode = product.ManufacturerCode,
+                StockStatusId = product.StockStatusId,
+                CurrencyTypeId = product.CurrencyTypeId,
+                CategoryId = product.CategoryId,
+                ManufacturerId = product.ManufacturerId
+            };
+
+            return productDTO;
+        }
+
         private async Task<Product> GetProductFromDTO(ProductDTO productDTO)
         {
-            Image mainImage = new Image { Path = productDTO.MainImage.FileName };
+            Image mainImage = new Image { Path = productDTO.MainImage?.FileName };
 
             Product product = new Product
             {
+                Id = productDTO.Id,
                 Title = productDTO.Title,
                 Description = productDTO.Description,
                 Price = productDTO.Price,
                 ManufacturerCode = productDTO.ManufacturerCode,
                 StockStatusId = productDTO.StockStatusId,
-                СurrencyTypeId = productDTO.СurrencyTypeId,
+                CurrencyTypeId = productDTO.CurrencyTypeId,
                 CategoryId = productDTO.CategoryId,
                 ManufacturerId = productDTO.ManufacturerId,
                 MainImage = mainImage
             };
 
             return product;   
+        }
+
+        public async Task<IEnumerable<CurrencyType>> GetAllCurrencyTypesAsync()
+        {
+            var currencyTypes = await unitOfWork.CurrencyTypeRepository.GetAllAsync();
+            return currencyTypes;
         }
     }
 }

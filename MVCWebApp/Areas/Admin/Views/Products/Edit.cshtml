@@ -1,0 +1,104 @@
+﻿@model BLL.Models.ProductDTO;
+
+@{
+    ViewData["Title"] = "Редагувати";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Редагувати товар</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="editForm" value="Зберегти" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-action="Index">Скасувати</a>
+</div>
+<hr />
+<form asp-action="Edit" id="editForm" class="row g-3" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="col-md-8">
+        <div class="row g-3">
+            <div class="form-group col-12">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group col-12">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control product-text-area"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row g-3">
+            <div class="form-group">
+                <label asp-for="MainImage" class="control-label"></label>
+                <input asp-for="MainImage" class="form-control" />
+                <span asp-validation-for="MainImage" class="text-danger"></span>
+            </div>
+            <div class="form-group col-12">
+                <label asp-for="ManufacturerCode" class="control-label"></label>
+                <input asp-for="ManufacturerCode" class="form-control" />
+                <span asp-validation-for="ManufacturerCode" class="text-danger"></span>
+            </div>
+            <div class="form-group col-12">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group col-12">
+                <label asp-for="ManufacturerId" class="control-label"></label>
+                <select asp-for="ManufacturerId" class="form-control" asp-items="ViewBag.ManufacturerId"></select>
+            </div>
+            <div class="form-group col-8">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group col-4">
+                <label asp-for="CurrencyTypeId" class="control-label"></label>
+                <select asp-for="CurrencyTypeId" class="form-control" asp-items="ViewBag.CurrencyTypeId"></select>
+            </div>
+            <div class="form-group col-12">
+                <label asp-for="StockStatusId" class="control-label"></label>
+                <select asp-for="StockStatusId" class="form-control" asp-items="ViewBag.StockStatusId"></select>
+            </div>
+            <div class="col-12">
+                <h6>
+                    <h6>@Html.DisplayNameFor(model => new Product().Characteristics)</h6>
+                </h6>
+                <div class="border rounded py-1">
+                    @if (ViewBag.Characteristics is not null)
+                    {
+                        <table class="table table-sm">
+                            <tbody>
+                                @foreach (Characteristic item in ViewBag.Characteristics)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ValueNumber) @Html.DisplayFor(modelItem => item.UnitType)
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a class="btn btn-outline-secondary" asp-controller="Characteristics" asp-action="Edit" asp-route-id="@item.Id" asp-route-productid="@item.ProductId">Редагувати</a>
+                                                <a class="btn btn-outline-secondary" asp-controller="Characteristics" asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    <a class="btn btn-sm btn-outline-secondary mx-1" asp-controller="Characteristics" asp-action="Create" asp-route-productid="@Model.Id">Додати</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
