@@ -4,6 +4,7 @@ using BLL.Models;
 using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MVCWebApp.Models;
 
@@ -22,7 +23,7 @@ namespace MVCWebApp.Controllers
             this.imageService = imageService;
         }
         // GET: Products
-        public async Task<ActionResult> Index(int? categoryId, string? name, int? searchCategoryId, int? searchManufacturerId, string? searchTitle)
+        public async Task<ActionResult> Index(int? categoryId, string? name, int? searchCategoryId, int? searchManufacturerId, string? searchTitle, ProductSortState sortOrder = ProductSortState.Default)
         {
             var categories = (await productService.GetAllCategoriesAsync()).ToList();
             var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
@@ -41,7 +42,7 @@ namespace MVCWebApp.Controllers
                 SearchTitle = searchTitle
             };
 
-            var products = await productService.GetByFilterAsync(filterSearchModel);
+            var products = await productService.GetByFilterAsync(filterSearchModel, sortOrder);
 
             ViewBag.CategoryName = "Всі товари";
 
@@ -57,7 +58,8 @@ namespace MVCWebApp.Controllers
                 Products = products,
                 SearchCategoryId = searchCategoryId,
                 SearchManufacturerId = searchManufacturerId,
-                SearchTitle = searchTitle
+                SearchTitle = searchTitle,
+                SortProductsViewModel = new SortProductsViewModel(sortOrder)
             };
 
             return View(productsView);

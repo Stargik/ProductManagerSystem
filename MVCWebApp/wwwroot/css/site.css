@@ -31,3 +31,7 @@ body {
 .footer{
     z-index: 1000;
 }
+
+.chevron-hidden{
+    visibility: hidden;
+}

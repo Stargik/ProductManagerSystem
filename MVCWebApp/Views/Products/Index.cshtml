@@ -32,10 +32,16 @@
                 @Html.DisplayNameFor(model => product.MainImage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => product.Title)
+                <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortTitle"
+                                     search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                    @Html.DisplayNameFor(model => product.Title)
+                </sort-product-header>
             </th>
             <th>
-                @Html.DisplayNameFor(model => product.ManufacturerCode)
+                <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortManufacturerCode"
+                                     search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                    @Html.DisplayNameFor(model => product.ManufacturerCode)
+                </sort-product-header>
             </th>
             <th>
                 @Html.DisplayNameFor(model => product.Category)

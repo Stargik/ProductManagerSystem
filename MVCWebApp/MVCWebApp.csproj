@@ -19,6 +19,7 @@
     <None Remove="Areas\Admin\" />
     <None Remove="Areas\Admin\Views\" />
     <None Remove="Areas\Admin\Controllers\" />
+    <None Remove="TagHelpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
@@ -57,6 +58,7 @@
     <Folder Include="Areas\Admin\" />
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="TagHelpers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\Images\" />

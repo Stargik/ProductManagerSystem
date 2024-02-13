@@ -4,6 +4,7 @@ using BLL.Models;
 using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MVCWebApp.Models;
 
@@ -23,7 +24,7 @@ namespace MVCWebApp.Areas.Admin.Controllers
             this.imageService = imageService;
         }
         // GET: Products
-        public async Task<ActionResult> Index(int? searchCategoryId, int? searchManufacturerId, string? searchTitle)
+        public async Task<ActionResult> Index(int? searchCategoryId, int? searchManufacturerId, string? searchTitle, ProductSortState sortOrder = ProductSortState.Default)
         {
             var categories = (await productService.GetAllCategoriesAsync()).ToList();
             var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
@@ -35,6 +36,10 @@ namespace MVCWebApp.Areas.Admin.Controllers
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Title");
             ViewData["ManufacturerId"] = new SelectList(manufacturers, "Id", "Name");
 
+            ViewData["SortTitle"] = sortOrder == ProductSortState.TitleAsc ? ProductSortState.TitleDesc : ProductSortState.TitleAsc;
+            ViewData["SortManufacturerCode"] = sortOrder == ProductSortState.ManufacturerCodeAsc ? ProductSortState.ManufacturerCodeDesc : ProductSortState.ManufacturerCodeAsc;
+            ViewData["SortPrice"] = sortOrder == ProductSortState.PriceAsc ? ProductSortState.PriceDesc : ProductSortState.PriceAsc;
+
             FilterSearchModel filterSearchModel = new FilterSearchModel
             {
                 CategoryId = searchCategoryId == -1 ? null : searchCategoryId,
@@ -42,14 +47,15 @@ namespace MVCWebApp.Areas.Admin.Controllers
                 SearchTitle = searchTitle
             };
 
-            var products = await productService.GetByFilterAsync(filterSearchModel);
+            var products = await productService.GetByFilterAsync(filterSearchModel, sortOrder);
 
             var productsView = new ProductsViewModel
             {
                 Products = products,
                 SearchCategoryId = searchCategoryId,
                 SearchManufacturerId = searchManufacturerId,
-                SearchTitle = searchTitle
+                SearchTitle = searchTitle,
+                SortProductsViewModel = new SortProductsViewModel(sortOrder)
             };
 
             return View(productsView);

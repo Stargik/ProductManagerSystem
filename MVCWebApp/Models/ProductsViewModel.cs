@@ -1,4 +1,5 @@
 ﻿using System;
+using BLL.Models;
 using DAL.Entities;
 
 namespace MVCWebApp.Models
@@ -9,6 +10,7 @@ namespace MVCWebApp.Models
 		public int? SearchCategoryId { get; set; }
 		public int? SearchManufacturerId { get; set; }
         public string? SearchTitle { get; set; }
+		public SortProductsViewModel SortProductsViewModel { get; set; } = new SortProductsViewModel(ProductSortState.Default);
     }
 }
 

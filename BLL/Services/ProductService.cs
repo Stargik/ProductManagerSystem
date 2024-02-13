@@ -50,18 +50,30 @@ namespace BLL.Services
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllAsync(ProductSortState productSortState = ProductSortState.Default)
         {
             var products = await productRepository.GetAllWithDetailsAsync();
+
+            if (productSortState != ProductSortState.Default)
+            {
+                products = await GetSortedProducts(products, productSortState);
+            }
+
             return products;
         }
 
-        public async Task<IEnumerable<Product>> GetByFilterAsync(FilterSearchModel filterSearch)
+        public async Task<IEnumerable<Product>> GetByFilterAsync(FilterSearchModel filterSearch, ProductSortState productSortState = ProductSortState.Default)
         {
             var products = await productRepository.GetAllWithDetailsAsync();
             products = products?.Where(p => (p.CategoryId == filterSearch.CategoryId || filterSearch.CategoryId is null) &&
                                        (p.ManufacturerId == filterSearch.ManufacturerId || filterSearch.ManufacturerId is null) &&
                                        (String.IsNullOrEmpty(filterSearch.SearchTitle) || p.Title.ToUpper().Contains(filterSearch.SearchTitle.ToUpper())));
+
+            if (productSortState != ProductSortState.Default && products is not null)
+            {
+                products = await GetSortedProducts(products, productSortState);
+            }
+
             return products;
         }
 
@@ -196,6 +208,21 @@ namespace BLL.Services
             };
 
             return product;   
+        }
+
+        private async Task<IEnumerable<Product>> GetSortedProducts(IEnumerable<Product> products, ProductSortState productSortState = ProductSortState.Default)
+        {
+            products = productSortState switch
+            {
+                ProductSortState.TitleAsc => products.OrderBy(p => p.Title),
+                ProductSortState.TitleDesc => products.OrderByDescending(p => p.Title),
+                ProductSortState.ManufacturerCodeAsc => products.OrderBy(p => p.ManufacturerCode),
+                ProductSortState.ManufacturerCodeDesc => products.OrderByDescending(p => p.ManufacturerCode),
+                ProductSortState.PriceAsc => products.OrderBy(p => p.Price),
+                ProductSortState.PriceDesc => products.OrderByDescending(p => p.Price),
+                _ => products.OrderBy(p => p.Id)
+            };
+            return products;
         }
 
         public async Task<IEnumerable<CurrencyType>> GetAllCurrencyTypesAsync()

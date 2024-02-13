@@ -10,10 +10,10 @@ namespace BLL.Interfaces
         Task UpdateAsync(ProductDTO productDTO);
         Task DeleteByIdAsync(int id);
         Task DeleteAsync(ProductDTO productDTO);
-        Task<IEnumerable<Product>> GetAllAsync();
+        Task<IEnumerable<Product>> GetAllAsync(ProductSortState productSortState = ProductSortState.Default);
         Task<Product> GetByIdAsync(int id);
         Task<ProductDTO> GetProductDTOByIdAsync(int id);
-        Task<IEnumerable<Product>> GetByFilterAsync(FilterSearchModel filterSearch);
+        Task<IEnumerable<Product>> GetByFilterAsync(FilterSearchModel filterSearch, ProductSortState productSortState = ProductSortState.Default);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         Task<Category> GetCategoryByIdAsync(int id);
         Task AddCategoryAsync(Category category);
