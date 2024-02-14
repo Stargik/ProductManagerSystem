@@ -1,4 +1,5 @@
 using System;
+using System.Drawing.Printing;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MVCWebApp.Configuration;
 using MVCWebApp.Models;
+using X.PagedList;
 
 namespace MVCWebApp.Areas.Admin.Controllers
 {
@@ -24,7 +27,7 @@ namespace MVCWebApp.Areas.Admin.Controllers
             this.imageService = imageService;
         }
         // GET: Products
-        public async Task<ActionResult> Index(int? searchCategoryId, int? searchManufacturerId, string? searchTitle, ProductSortState sortOrder = ProductSortState.Default)
+        public async Task<ActionResult> Index(int? searchCategoryId, int? searchManufacturerId, string? searchTitle, int? pageNumber, int? pageSize, ProductSortState sortOrder = ProductSortState.Default)
         {
             var categories = (await productService.GetAllCategoriesAsync()).ToList();
             var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
@@ -49,9 +52,13 @@ namespace MVCWebApp.Areas.Admin.Controllers
 
             var products = await productService.GetByFilterAsync(filterSearchModel, sortOrder);
 
+            pageSize = (pageSize ?? PaginationSettings.pageSize);
+            pageNumber = (pageNumber ?? PaginationSettings.pageNumber);
+            var productsPaged = products.ToPagedList((int)pageNumber, (int)pageSize);
+
             var productsView = new ProductsViewModel
             {
-                Products = products,
+                Products = productsPaged,
                 SearchCategoryId = searchCategoryId,
                 SearchManufacturerId = searchManufacturerId,
                 SearchTitle = searchTitle,

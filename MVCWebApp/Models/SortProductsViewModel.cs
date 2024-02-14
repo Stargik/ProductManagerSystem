@@ -8,7 +8,8 @@ namespace MVCWebApp.Models
         public ProductSortState SortTitle { get; set; } 
         public ProductSortState SortManufacturerCode { get; set; }    
         public ProductSortState SortPrice { get; set; }   
-        public ProductSortState Current { get; set; }    
+        public ProductSortState Current { get; set; }
+        public ProductSortState InverseCurrent { get; set; }
         public bool Up { get; set; }
 
         public SortProductsViewModel(ProductSortState sortOrder)
@@ -17,6 +18,7 @@ namespace MVCWebApp.Models
             SortManufacturerCode = ProductSortState.ManufacturerCodeAsc;
             SortPrice = ProductSortState.PriceAsc;
             Up = true;
+            InverseCurrent = sortOrder;
 
             if (sortOrder == ProductSortState.TitleDesc || sortOrder == ProductSortState.ManufacturerCodeDesc || sortOrder == ProductSortState.PriceDesc)
             {

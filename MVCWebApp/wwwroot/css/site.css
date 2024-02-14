@@ -35,3 +35,16 @@ body {
 .chevron-hidden{
     visibility: hidden;
 }
+.custom-pagination .page-link {
+    color: #6c757d;
+    border-color: #dee2e6;
+}
+.custom-pagination .page-item.active .page-link {
+    color: #fff;
+    border-color: #6c757d;
+    background-color: #6c757d;
+}
+
+.custom-pagination .page-link:hover {
+    color: #6c757d;
+}

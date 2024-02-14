@@ -34,7 +34,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.UnitType)
                 </td>
-                <td>
+                <td class="text-end">
                     <a asp-action="Edit" asp-route-id="@item.Id" asp-route-productid="@item.ProductId">Редагувати</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Докладніше</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
@@ -44,6 +44,6 @@
     </tbody>
 </table>
 <p>
-    <a asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.ProductId">ПОвернутися до товару</a>
+    <a asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.ProductId">Повернутися до товару</a>
     <a asp-action="Create" asp-route-courceid="@ViewBag.ProductId">Створити</a>
 </p>

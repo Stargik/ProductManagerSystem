@@ -33,13 +33,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.UnitType)
                 </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <td class="text-end">
+                    <a asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <p>
-    <a asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.ProductId">Back to the product</a>
+    <a asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.ProductId">Повернутися до товару</a>
 </p>

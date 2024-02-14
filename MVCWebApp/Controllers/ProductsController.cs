@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MVCWebApp.Configuration;
 using MVCWebApp.Models;
+using X.PagedList;
 
 namespace MVCWebApp.Controllers
 {
@@ -23,7 +25,7 @@ namespace MVCWebApp.Controllers
             this.imageService = imageService;
         }
         // GET: Products
-        public async Task<ActionResult> Index(int? categoryId, string? name, int? searchCategoryId, int? searchManufacturerId, string? searchTitle, ProductSortState sortOrder = ProductSortState.Default)
+        public async Task<ActionResult> Index(int? categoryId, string? name, int? searchCategoryId, int? searchManufacturerId, string? searchTitle, int? pageNumber, int? pageSize, ProductSortState sortOrder = ProductSortState.Default)
         {
             var categories = (await productService.GetAllCategoriesAsync()).ToList();
             var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
@@ -34,6 +36,8 @@ namespace MVCWebApp.Controllers
             ViewData["ImageStoragePath"] = await imageService.GetStoragePath();
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Title");
             ViewData["ManufacturerId"] = new SelectList(manufacturers, "Id", "Name");
+
+
 
             FilterSearchModel filterSearchModel = new FilterSearchModel
             {
@@ -53,14 +57,20 @@ namespace MVCWebApp.Controllers
                 products = await productService.GetByFilterAsync(new FilterSearchModel { CategoryId = categoryId });
             }
 
+            pageSize = (pageSize ?? PaginationSettings.pageSize);
+            pageNumber = (pageNumber ?? PaginationSettings.pageNumber);
+            var productsPaged = products.ToPagedList((int)pageNumber, (int)pageSize);
+
             var productsView = new ProductsViewModel
             {
-                Products = products,
+                Products = productsPaged,
                 SearchCategoryId = searchCategoryId,
                 SearchManufacturerId = searchManufacturerId,
                 SearchTitle = searchTitle,
                 SortProductsViewModel = new SortProductsViewModel(sortOrder)
             };
+
+            
 
             return View(productsView);
         }

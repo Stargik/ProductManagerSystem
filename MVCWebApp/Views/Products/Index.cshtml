@@ -83,11 +83,32 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.StockStatus.Name)
                 </td>
-                <td>
-                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <td class="text-end">
+                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@if (Model.Products.PageCount > 1)
+{
+    @Html.PagedListPager(Model.Products, pageNumber => Url.Action("Index",
+        new { pageNumber, searchCategoryId = Model.SearchCategoryId, searchManufacturerId = Model.SearchManufacturerId, searchTitle = Model.SearchTitle, sortOrder = Model.SortProductsViewModel.InverseCurrent }
+        ),
+        new PagedListRenderOptions()
+        {
+            UlElementClasses = new string[] { "pagination", "justify-content-end", "custom-pagination" },
+            LiElementClasses = new string[1] { "page-item" },
+            PageClasses = new string[1] { "page-link" },
+            LinkToFirstPageFormat = "&laquo;",
+            LinkToLastPageFormat = "&raquo;",
+            LinkToPreviousPageFormat = "&lsaquo;",
+            LinkToNextPageFormat = "&rsaquo;",
+            MaximumPageNumbersToDisplay = 3
+        }
+    )
+}
+
+
 

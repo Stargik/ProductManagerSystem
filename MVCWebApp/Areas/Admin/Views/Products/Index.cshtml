@@ -59,7 +59,7 @@
                 @Html.DisplayNameFor(model => product.Manufacturer)
             </th>
             <th>
-                    @Html.DisplayNameFor(model => product.Price)
+                @Html.DisplayNameFor(model => product.Price)
             </th>
             <th>
                 @Html.DisplayNameFor(model => product.StockStatus)
@@ -95,7 +95,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.StockStatus.Name)
                 </td>
-                <td>
+                <td class="text-end">
                     <div class="btn-group btn-group-sm">
                         <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
                         <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
@@ -107,3 +107,21 @@
     </tbody>
 </table>
 
+@if (Model.Products.PageCount > 1)
+{
+    @Html.PagedListPager(Model.Products, pageNumber => Url.Action("Index",
+        new { pageNumber, searchCategoryId = Model.SearchCategoryId, searchManufacturerId = Model.SearchManufacturerId, searchTitle = Model.SearchTitle, sortOrder = Model.SortProductsViewModel.InverseCurrent }
+        ),
+        new PagedListRenderOptions()
+        {
+            UlElementClasses = new string[] { "pagination", "justify-content-end", "custom-pagination" },
+            LiElementClasses = new string[1] { "page-item" },
+            PageClasses = new string[1] { "page-link" },
+            LinkToFirstPageFormat = "&laquo;",
+            LinkToLastPageFormat = "&raquo;",
+            LinkToPreviousPageFormat = "&lsaquo;",
+            LinkToNextPageFormat = "&rsaquo;",
+            MaximumPageNumbersToDisplay = 3
+        }
+    )
+}
