@@ -7,7 +7,7 @@ namespace MVCWebApp
         public const string IdentityProductManagerDbConnection = "IdentityProductManagerDbConnection";
         public const string StaticFilesSection = "StaticFilesSection";
         public const string AzureBlobStorageSection = "AzureBlobStorageSection";
-        public const string PuginationSection = "PuginationSection";
+        public const string PaginationSettings = "PaginationSettings";
     }
 }
 

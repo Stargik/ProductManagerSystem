@@ -29,6 +29,7 @@ public class Program
         );
 
         builder.Services.Configure<StaticFilesSettings>(builder.Configuration.GetSection(SettingStrings.StaticFilesSection));
+        builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection(SettingStrings.PaginationSettings));
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddTransient<IManufacturerService, ManufacturerService>();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MVCWebApp.Configuration;
 using MVCWebApp.Models;
 using X.PagedList;
@@ -19,15 +20,17 @@ namespace MVCWebApp.Areas.Admin.Controllers
         private readonly IProductService productService;
         private readonly IManufacturerService manufacturerService;
         private readonly IImageService imageService;
+        private readonly PaginationSettings paginationSettings;
 
-        public ProductsController(IProductService productService, IManufacturerService manufacturerService, IImageService imageService)
+        public ProductsController(IProductService productService, IManufacturerService manufacturerService, IImageService imageService, IOptions<PaginationSettings> paginationSettings)
         {
             this.productService = productService;
             this.manufacturerService = manufacturerService;
             this.imageService = imageService;
+            this.paginationSettings = paginationSettings.Value;
         }
         // GET: Products
-        public async Task<ActionResult> Index(int? searchCategoryId, int? searchManufacturerId, string? searchTitle, int? pageNumber, int? pageSize, ProductSortState sortOrder = ProductSortState.Default)
+        public async Task<ActionResult> Index(int? categoryId, string? name, int? searchCategoryId, int? searchManufacturerId, string? searchTitle, int? pageNumber, int? pageSize, ProductSortState sortOrder = ProductSortState.Default)
         {
             var categories = (await productService.GetAllCategoriesAsync()).ToList();
             var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
@@ -52,8 +55,8 @@ namespace MVCWebApp.Areas.Admin.Controllers
 
             var products = await productService.GetByFilterAsync(filterSearchModel, sortOrder);
 
-            pageSize = (pageSize ?? PaginationSettings.pageSize);
-            pageNumber = (pageNumber ?? PaginationSettings.pageNumber);
+            pageSize = (pageSize ?? paginationSettings.PageSize);
+            pageNumber = (pageNumber ?? paginationSettings.PageNumber);
             var productsPaged = products.ToPagedList((int)pageNumber, (int)pageSize);
 
             var productsView = new ProductsViewModel

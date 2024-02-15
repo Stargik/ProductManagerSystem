@@ -3,8 +3,8 @@ namespace MVCWebApp.Configuration
 {
 	public class PaginationSettings
 	{
-        public static int pageNumber = 1;
-        public static int pageSize = 40;
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
     }
 }
 
