@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MVCWebApp.Areas.Identity.Models.User>
+
+@{
+    ViewData["Title"] = "Підписники";
+    ViewData["StatusMessage"] = TempData["StatusMessage"];
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="subscribersForm" value="Надіслати каталог обраним підписникам" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-action="Edit">Налаштувати автоматичне надсилання каталогу</a>
+</div>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Обрати
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Імʼя
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input form="subscribersForm" type="checkbox" name="subscriberEmails" value="@Html.DisplayFor(modelItem => item.Email)" class="form-check-input" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                        <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id">Редагувати</a>
+                        <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
+                        <a class="btn btn-outline-secondary" asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<form asp-action="Send" id="subscribersForm">
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

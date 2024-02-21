@@ -1,12 +1,15 @@
-﻿using System.Diagnostics;
+﻿using System.Data;
+using System.Diagnostics;
 using BLL.Interfaces;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCWebApp.Models;
 
 namespace MVCWebApp.Areas.Admin.Controllers.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = "admin")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

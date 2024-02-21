@@ -1,26 +1,34 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MVCWebApp.Areas.Identity.Models
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    ViewData["ParentLayout"] = "/Areas/Admin/Shared/_Layout.cshtml";
+}
 
 <div class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-        </div>
-        <div class="nav-item text-nowrap">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link">Logout</button>
-            </form>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center nav-link link-body-emphasis text-decoration-none dropdown-toggle px-3" data-bs-toggle="dropdown" aria-expanded="false">
+                <strong>Аккаунт</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Налаштування</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item btn btn-link">Вийти</button>
+                    </form>
+                </li>
+            </ul>
         </div>
     }
     else
     {
         <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </div>
-        <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link px-3" asp-area="Identity" asp-page="/Account/Login">Логін</a>
         </div>
     }
 </div>

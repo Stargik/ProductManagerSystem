@@ -9,17 +9,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MVCWebApp.Areas.Identity.Configuration;
+using MVCWebApp.Areas.Identity.Models;
 
 namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -29,6 +31,7 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [Display(Name = "Логін")]
         public string Username { get; set; }
 
         /// <summary>
@@ -55,21 +58,31 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
+            [Phone(ErrorMessage = "Неправильно формат номера телефону")]
+            [DataType(DataType.PhoneNumber)]
+            [Display(Name = "Телефон")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Імʼя")]
+            public string? Name { get; set; }
+
+            [Display(Name = "Підписатися на розсилку")]
+            public bool IsSubscriber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(User user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var isSubscriber = await _userManager.IsInRoleAsync(user, RoleSettings.SubscriberRole);
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Name = user.Name,
+                IsSubscriber = isSubscriber
             };
         }
 
@@ -88,6 +101,8 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            var isSubscriber = await _userManager.IsInRoleAsync(user, RoleSettings.SubscriberRole);
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -110,8 +125,29 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (Input.Name != user.Name)
+            {
+                user.Name = Input.Name;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            if (Input.IsSubscriber != isSubscriber)
+            {
+                if (Input.IsSubscriber)
+                {
+                    await _userManager.AddToRoleAsync(user, RoleSettings.SubscriberRole);
+                }
+
+                if (!Input.IsSubscriber)
+                {
+                    await _userManager.RemoveFromRoleAsync(user, RoleSettings.SubscriberRole);
+                }
+                
+            }
+
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Ваші дані оновлено.";
             return RedirectToPage();
         }
     }

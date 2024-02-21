@@ -1,12 +1,15 @@
 using System;
+using System.Data;
 using BLL.Interfaces;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MVCWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "admin")]
     public class ManufacturersController : Controller
     {
         private readonly IManufacturerService manufacturerService;

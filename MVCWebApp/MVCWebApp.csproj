@@ -20,6 +20,11 @@
     <None Remove="Areas\Admin\Views\" />
     <None Remove="Areas\Admin\Controllers\" />
     <None Remove="TagHelpers\" />
+    <None Remove="Areas\Identity\Models\" />
+    <None Remove="Areas\Admin\Views\Users\" />
+    <None Remove="Areas\Admin\Models\" />
+    <None Remove="Areas\Admin\Views\Subscription\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
@@ -61,6 +66,11 @@
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="TagHelpers\" />
+    <Folder Include="Areas\Identity\Models\" />
+    <Folder Include="Areas\Admin\Views\Users\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Subscription\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\Images\" />

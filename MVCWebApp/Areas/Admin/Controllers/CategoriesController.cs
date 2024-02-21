@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MVCWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class CategoriesController : Controller
     {
         private readonly IProductService productService;

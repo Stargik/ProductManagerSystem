@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Автоматичне надсилання каталогу";
+    ViewData["StatusMessage"] = TempData["StatusMessage"];
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="editForm" value="Зберегти" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-action="Delete">Вимкнути</a>
+    <a class="btn btn-outline-dark" asp-action="Index">Скасувати</a>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" id="editForm">
+            <div class="form-group">
+                <label for="CronString" class="control-label">Налаштування у форматі CRON: </label>
+                <input type="text" id="CronString" name="CronString" class="form-control" placeholder="* * * * *" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

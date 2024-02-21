@@ -1,8 +1,10 @@
 using System;
+using System.Data;
 using System.Drawing.Printing;
 using BLL.Interfaces;
 using BLL.Models;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -15,19 +17,22 @@ using X.PagedList;
 namespace MVCWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "admin")]
     public class ProductsController : Controller
     {
         private readonly IProductService productService;
         private readonly IManufacturerService manufacturerService;
         private readonly IImageService imageService;
         private readonly PaginationSettings paginationSettings;
+        private readonly IDataPortServiceFactory<Product> productDataServiceFactory;
 
-        public ProductsController(IProductService productService, IManufacturerService manufacturerService, IImageService imageService, IOptions<PaginationSettings> paginationSettings)
+        public ProductsController(IProductService productService, IManufacturerService manufacturerService, IImageService imageService, IOptions<PaginationSettings> paginationSettings, IDataPortServiceFactory<Product> productDataServiceFactory)
         {
             this.productService = productService;
             this.manufacturerService = manufacturerService;
             this.imageService = imageService;
             this.paginationSettings = paginationSettings.Value;
+            this.productDataServiceFactory = productDataServiceFactory;
         }
         // GET: Products
         public async Task<ActionResult> Index(int? categoryId, string? name, int? searchCategoryId, int? searchManufacturerId, string? searchTitle, int? pageNumber, int? pageSize, ProductSortState sortOrder = ProductSortState.Default)
@@ -242,6 +247,37 @@ namespace MVCWebApp.Areas.Admin.Controllers
                 await productService.DeleteByIdAsync((int)id);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Export()
+        {
+            var categories = (await productService.GetAllCategoriesAsync()).ToList();
+            var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
+
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Title");
+            ViewData["ManufacturerId"] = new SelectList(manufacturers, "Id", "Name");
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ExportXml(List<int> categoryIds, List<int> manufacturerIds, string contentType = "application/xml", PortType portType = PortType.Default)
+        {
+            var exportService = productDataServiceFactory.GetExportService(contentType);
+
+            using (var stream = new MemoryStream())
+            {
+                var products = (await productService.GetAllAsync()).Where(p => categoryIds.Contains(p.CategoryId) && manufacturerIds.Contains(p.ManufacturerId));
+
+                await exportService.WriteToAsync(stream, products, portType);
+
+                await stream.FlushAsync();
+
+                return new FileContentResult(stream.ToArray(), contentType)
+                {
+                    FileDownloadName = $"Catalog_{DateTime.UtcNow.ToString("MMddyyyy")}.xml"
+                };
+            }
         }
     }
 }

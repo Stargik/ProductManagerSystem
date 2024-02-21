@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DAL.Entities.Product>
+
+@{
+    ViewData["Title"] = "Експорт товарів";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="exportForm" value="Експорт" class="btn btn-outline-dark" />
+</div>
+<hr />
+<form asp-action="ExportXml" id="exportForm" class="row g-3">
+    <div class="form-group col-6">
+        <label for="categoryIds" class="form-label">Категорії:</label>
+        <select name="categoryIds" class="form-select" multiple="" id="categoryIds" asp-items="ViewBag.CategoryId"></select>
+    </div>
+    <div class="form-group col-6">
+        <label for="manufacturerIds" class="form-label">Бренди:</label>
+        <select name="manufacturerIds" class="form-select" multiple="" id="manufacturerIds" asp-items="ViewBag.ManufacturerId"></select>
+    </div>
+</form>
+
+

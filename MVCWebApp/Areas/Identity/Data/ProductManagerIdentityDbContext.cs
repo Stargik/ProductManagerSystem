@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MVCWebApp.Areas.Identity.Configuration;
+using MVCWebApp.Areas.Identity.Models;
 
 namespace MVCWebApp.Areas.Identity.Data;
 
-public class ProductManagerIdentityDbContext : IdentityDbContext<IdentityUser>
+public class ProductManagerIdentityDbContext : IdentityDbContext<User>
 {
     public ProductManagerIdentityDbContext(DbContextOptions<ProductManagerIdentityDbContext> options)
         : base(options)

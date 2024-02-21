@@ -2,11 +2,13 @@ using System;
 using System.Net.Mail;
 using BLL.Interfaces;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MVCWebApp.Controllers
 {
+    [Authorize]
     public class CharacteristicsController : Controller
     {
         private readonly IProductService productService;

@@ -1,0 +1,38 @@
+﻿@model MVCWebApp.Areas.Admin.Models.UserViewModel
+
+
+@{
+    ViewData["Title"] = "Перегляд";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Користувач</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <a class="btn btn-outline-dark" asp-action="Edit" asp-route-id="@Model?.User.Id">Редагувати</a>
+    <a class="btn btn-outline-dark" asp-action="Index">Повернутися до списку</a>
+</div>
+<hr />
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <h6>Загальна інформація</h6>
+        <ul class="list-group">
+            <li class="list-group-item">Логін: @Html.DisplayFor(model => model.User.UserName)</li>
+            <li class="list-group-item">Email: @Html.DisplayFor(model => model.User.Email)</li>
+            <li class="list-group-item">Імʼя: @Html.DisplayFor(model => model.User.Name)</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        @if (Model.UserRoles.Count() != 0)
+        {
+            <h6>@Html.DisplayNameFor(model => Model.UserRoles)</h6>
+            <ul class="list-group">
+                @foreach (var item in Model.UserRoles)
+                {
+                    <li class="list-group-item">@item</li>
+                }
+            </ul>
+        }
+    </div>
+</div>

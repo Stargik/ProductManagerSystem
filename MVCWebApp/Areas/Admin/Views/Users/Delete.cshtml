@@ -1,0 +1,43 @@
+﻿@model MVCWebApp.Areas.Admin.Models.UserViewModel
+
+@{
+    ViewData["Title"] = "Видалити";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Видалити користувача</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <input type="submit" form="deleteForm" value="Видалити" class="btn btn-outline-dark" />
+    <a class="btn btn-outline-dark" asp-action="Index">Скасувати</a>
+</div>
+<hr />
+<h3>Ви справді хочете видалити користувача?</h3>
+<div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <h6>Загальна інформація</h6>
+            <ul class="list-group">
+                <li class="list-group-item">Логін: @Html.DisplayFor(model => model.User.UserName)</li>
+                <li class="list-group-item">Email: @Html.DisplayFor(model => model.User.Email)</li>
+                <li class="list-group-item">Імʼя: @Html.DisplayFor(model => model.User.Name)</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            @if (Model.UserRoles.Count() != 0)
+            {
+                <h6>@Html.DisplayNameFor(model => Model.UserRoles)</h6>
+                <ul class="list-group">
+                    @foreach (var item in Model.UserRoles)
+                    {
+                        <li class="list-group-item">@item</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <form asp-action="Delete" id="deleteForm">
+        <input type="hidden" asp-for="User.Id" />
+    </form>
+</div>

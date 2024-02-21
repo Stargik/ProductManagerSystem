@@ -48,3 +48,12 @@ body {
 .custom-pagination .page-link:hover {
     color: #6c757d;
 }
+.custom-pills .nav-link {
+    color: #000000;
+    border-color: #dee2e6;
+}
+.custom-pills .nav-item .nav-link.active {
+    color: #fff;
+    border-color: #6c757d;
+    background-color: #6c757d;
+}

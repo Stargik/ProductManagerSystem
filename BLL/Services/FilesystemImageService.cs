@@ -2,7 +2,6 @@
 using BLL.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using BLL.Interfaces;
 using System.IO;
 
@@ -32,6 +31,12 @@ namespace BLL.Services
         public async Task<string> GetStoragePath()
         {
             string directoryPath = "/" + imgSettings.Path;
+            return directoryPath;
+        }
+
+        public async Task<string> GetAbsoluteStoragePath()
+        {
+            string directoryPath = rootPath + "/" + imgSettings.Path;
             return directoryPath;
         }
 
