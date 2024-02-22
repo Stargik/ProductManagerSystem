@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  mvcwebapp:
+    image: ${DOCKER_REGISTRY-}mvcwebapp
+    build:
+      context: .
+      dockerfile: MVCWebApp/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__ProductManagerDbConnection=Data Source=sqlserver;Initial Catalog=ProductManagerDb;User ID=sa;Password=P@ssword;TrustServerCertificate=True;
+      - ConnectionStrings__IdentityProductManagerDbConnection=Data Source=sqlserver;Initial Catalog=IdentityProductManagerDb;User ID=sa;Password=P@ssword;TrustServerCertificate=True;MultipleActiveResultSets=true;
+      - ConnectionStrings__HangfireProductManagerDbConnection=Data Source=sqlserver;Initial Catalog=ProductManagerDb;User ID=sa;Password=P@ssword;TrustServerCertificate=True;MultipleActiveResultSets=true;
+    ports:
+      - "7661:80"
+      - "7761:443"
+
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    hostname: sqlserver
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: P@ssword
+    ports:
+      - "7734:1433"
