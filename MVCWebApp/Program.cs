@@ -10,9 +10,9 @@ using BLL.Services;
 using Microsoft.Extensions.Options;
 using MVCWebApp.Areas.Identity.Models;
 using DAL.Entities;
-using Microsoft.AspNetCore.Hosting;
 using Hangfire;
 using MVCWebApp.Helpers;
+using MVCWebApp.Filters;
 
 namespace MVCWebApp;
 
@@ -102,7 +102,10 @@ public class Program
 
         await app.InitializeRoles();
 
-        app.UseHangfireDashboard();
+        app.UseHangfireDashboard("/Admin/hangfire", new DashboardOptions
+        {
+            Authorization = new[] { new HangfireAuthorizationFilter() }
+        });
 
         app.MapRazorPages();
 
