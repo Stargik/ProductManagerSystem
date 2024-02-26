@@ -74,8 +74,10 @@
     <Folder Include="Areas\Admin\Views\Subscription\" />
     <Folder Include="Helpers\" />
     <Folder Include="Filters\" />
+    <Folder Include="wwwroot\Media\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\Images\" />
+    <Content Remove="wwwroot\Media\" />
   </ItemGroup>
 </Project>
