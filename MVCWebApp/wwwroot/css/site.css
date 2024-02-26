@@ -28,8 +28,13 @@ body {
     //background-color: #313a46;
 }
 
-.footer{
+.logo-img {
+    max-height: 42px;
+}
+
+.footer {
     z-index: 1000;
+    color: #b0b0b0;
 }
 
 .chevron-hidden{
@@ -56,4 +61,20 @@ body {
     color: #fff;
     border-color: #6c757d;
     background-color: #6c757d;
+}
+
+.footer a {
+    color: #f70303;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.footer a:hover, .footer a:focus {
+    color: #ab0202;
+    text-decoration: underline;
+}
+
+.navbar .navbar-admin {
+    padding-bottom: 3px;
+    padding-top: 3px;
 }
