@@ -34,6 +34,7 @@ public class Program
         );
 
         builder.Services.Configure<StaticFilesSettings>(builder.Configuration.GetSection(SettingStrings.StaticFilesSection));
+        builder.Services.Configure<BlobStaticFilesSettings>(builder.Configuration.GetSection(SettingStrings.AzureBlobStorageSection));
         builder.Services.Configure<ShopSettings>(builder.Configuration.GetSection(SettingStrings.ShopSection));
         builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(SettingStrings.MailSettings));
         builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection(SettingStrings.PaginationSettings));
@@ -41,12 +42,22 @@ public class Program
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddTransient<IManufacturerService, ManufacturerService>();
         builder.Services.AddTransient<IProductService, ProductService>();
-        builder.Services.AddTransient<IImageService, FilesystemImageService>(
-            serviceProvider => new FilesystemImageService(
+
+        if (builder.Configuration[SettingStrings.ImagesSetting] == "blob")
+        {
+            builder.Services.AddTransient<IImageService, BlobStorageImageService>();
+        }
+        else
+        {
+            builder.Services.AddTransient<IImageService, FilesystemImageService>(
+                serviceProvider => new FilesystemImageService(
                     serviceProvider.GetRequiredService<IOptions<StaticFilesSettings>>(),
                     serviceProvider.GetService<IWebHostEnvironment>().WebRootPath
-            )
-        );
+                )
+            );
+        }
+
+
         builder.Services.AddScoped<IDataPortServiceFactory<Product>, ProductDataPortServiceFactory>();
         builder.Services.AddTransient<IEmailService, EmailService>();
         builder.Services.AddTransient<ISubscriptionService, SubscriptionService>();
