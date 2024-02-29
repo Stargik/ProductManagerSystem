@@ -38,7 +38,7 @@ namespace BLL.Models
         public string ManufacturerCode { get; set; }
         [XmlElement("stock_status")]
         public string StockStatus { get; set; }
-        [XmlElement("categoryId")]
+        [XmlElement("category_id")]
         public int Category { get; set; }
         [XmlElement("brand")]
         public string Manufacturer { get; set; }
