@@ -78,6 +78,9 @@ body {
     padding-bottom: 3px;
     padding-top: 3px;
 }
-table thead > tr > th {
+table.productTable thead > tr > th {
     white-space: nowrap;
+}
+table.productTable tr > td > img {
+    max-width: 100px;
 } 

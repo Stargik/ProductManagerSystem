@@ -25,7 +25,7 @@
     </div>
 </form>
 
-<table class="table align-middle">
+<table class="table align-middle productTable">
     <thead>
         <tr>
             <th>
@@ -63,7 +63,7 @@
         {
             <tr>
                 <td>
-                    <img style="max-height: 100px;" src="@(ViewData["ImageStoragePath"] + "/" + item.MainImage.Path)" asp-append-version="true">
+                    <img src="@(ViewData["ImageStoragePath"] + "/" + item.MainImage.Path)" asp-append-version="true">
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
