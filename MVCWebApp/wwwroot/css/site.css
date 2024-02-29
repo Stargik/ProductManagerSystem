@@ -78,3 +78,6 @@ body {
     padding-bottom: 3px;
     padding-top: 3px;
 }
+table thead > tr > th {
+    white-space: nowrap;
+} 
