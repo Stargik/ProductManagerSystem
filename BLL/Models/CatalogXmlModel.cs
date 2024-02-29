@@ -31,6 +31,7 @@ namespace BLL.Models
     {
         [XmlAttribute("id")]
         public int Id { get; set; }
+        [XmlElement("title")]
         public string Title { get; set; }
         [XmlElement("description")]
         public string Description { get; set; }
