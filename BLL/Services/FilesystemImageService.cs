@@ -55,6 +55,10 @@ namespace BLL.Services
         {
             string directoryPath = rootPath + "/" + imgSettings.Path;
             string fullPath = directoryPath + "/" + imgFile.FileName;
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
             string[] fileEntries = Directory.GetFiles(directoryPath);
 
             if (fileEntries.Contains(fullPath))
