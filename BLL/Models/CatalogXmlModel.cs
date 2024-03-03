@@ -3,6 +3,7 @@ using DAL.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace BLL.Models
 {
@@ -10,13 +11,6 @@ namespace BLL.Models
     [XmlRoot("catalog")]
     public class CatalogXmlModel
     {
-
-        [XmlElement("url")]
-        public string ShopUrl { get; set; }
-
-        [XmlElement("company")]
-        public string ShopName { get; set; }
-
         [XmlArray("currencies")]
         [XmlArrayItem("currency")]
         public List<CurrencyTypeXmlModel> CurrencyTypes { get; set; }
@@ -27,6 +21,33 @@ namespace BLL.Models
 
         [XmlArray("products")]
         [XmlArrayItem("product")]
+        public List<ProductXmlModel> Products { get; set; }
+    }
+
+
+    [XmlRoot("yml_catalog")]
+    public class CatalogRozetkaXmlModel
+    {
+        [XmlAttribute("date")]
+        public string Date { get; set; }
+
+        [XmlElement("shop")]
+        public ShopRozetkaXmlModel Shop { get; set; }
+    }
+
+    [XmlRoot("shop")]
+    public class ShopRozetkaXmlModel
+    {
+        [XmlArray("currencies")]
+        [XmlArrayItem("currency")]
+        public List<CurrencyTypeXmlModel> CurrencyTypes { get; set; }
+
+        [XmlArray("categories")]
+        [XmlArrayItem("category")]
+        public List<CategoryXmlModel> Categories { get; set; }
+
+        [XmlArray("offers")]
+        [XmlArrayItem("offer")]
         public List<ProductXmlModel> Products { get; set; }
     }
 
@@ -43,6 +64,8 @@ namespace BLL.Models
         public string ManufacturerCode { get; set; }
         [XmlElement("stock_status")]
         public string StockStatus { get; set; }
+        [XmlIgnore]
+        public int StockQuantity { get; set; }
         [XmlElement("category_id")]
         public int Category { get; set; }
         [XmlElement("brand")]
@@ -63,9 +86,9 @@ namespace BLL.Models
     [XmlRoot("characteristic")]
     public class CharacteristicXmlModel
     {
-        [XmlElement("name")]
+        [XmlAttribute("name")]
         public string Name { get; set; }
-        [XmlElement("value")]
+        [XmlText]
         public string ValueNumber { get; set; }
         [XmlAttribute("unit")]
         public string? UnitType { get; set; }
@@ -76,6 +99,8 @@ namespace BLL.Models
     {
         [XmlAttribute("id")]
         public int Id { get; set; }
+        [XmlIgnore]
+        public string? RozetkaId { get; set; }
         [XmlText]
         public string Title { get; set; }
     }

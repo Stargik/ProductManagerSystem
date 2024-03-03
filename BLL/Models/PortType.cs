@@ -1,9 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace BLL.Models
 {
 	public enum PortType
 	{
-		Default
-	}
+        [Display(Name = "За замовчуванням")]
+        Default,
+        [Display(Name = "Для Rozetka")]
+        RozetkaXml
+    }
 }
 
