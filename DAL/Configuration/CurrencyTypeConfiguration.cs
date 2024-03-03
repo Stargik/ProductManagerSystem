@@ -13,17 +13,20 @@ namespace DAL.Configuration
                 new CurrencyType
                 {
                     Id = 1,
-                    Name = "EUR"
+                    Name = "EUR",
+                    Rate = 40
                 },
                 new CurrencyType
                 {
                     Id = 2,
-                    Name = "USD"
+                    Name = "USD",
+                    Rate = 40
                 },
                 new CurrencyType
                 {
                     Id = 3,
-                    Name = "UAH"
+                    Name = "UAH",
+                    Rate = 1
                 }
             );
         }

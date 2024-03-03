@@ -1,0 +1,31 @@
+﻿@model DAL.Entities.CurrencyType
+
+
+@{
+    ViewData["Title"] = "Перегляд";
+    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+}
+
+<h1>Валюта</h1>
+<hr />
+<div class="btn-group btn-group-sm" role="group">
+    <a class="btn btn-outline-dark" asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a>
+    <a class="btn btn-outline-dark" asp-action="Index">Повернутися до  списку</a>
+</div>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rate)
+        </dd>
+    </dl>
+</div>

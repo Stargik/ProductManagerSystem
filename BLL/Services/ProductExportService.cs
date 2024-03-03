@@ -39,7 +39,9 @@ namespace BLL.Services
                 ShopUrl = shopSettings.BaseUrl,
                 ShopName = shopSettings.Name,
                 Products = new List<ProductXmlModel>(),
-                Categories = new List<CategoryXmlModel>() };
+                Categories = new List<CategoryXmlModel>(),
+                CurrencyTypes = new List<CurrencyTypeXmlModel>()
+            };
 
             foreach (var item in entities)
             {
@@ -48,6 +50,12 @@ namespace BLL.Services
                 {
                     var categoryXmlModel = new CategoryXmlModel { Id = item.Category.Id, Title = item.Category.Title };
                     catalogXmlModel.Categories.Add(categoryXmlModel);
+                }
+
+                if (!catalogXmlModel.CurrencyTypes.Exists(c => c.Id == item.CurrencyTypeId))
+                {
+                    var currencyTypeXmlModel = new CurrencyTypeXmlModel { Id = item.CurrencyType.Id, Name = item.CurrencyType.Name, Rate = item.CurrencyType.Rate };
+                    catalogXmlModel.CurrencyTypes.Add(currencyTypeXmlModel);
                 }
             }
 

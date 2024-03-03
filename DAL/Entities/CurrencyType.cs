@@ -8,6 +8,9 @@ namespace DAL.Entities
         [Display(Name = "Назва")]
         public string Name { get; set; }
 
+        [Display(Name = "Курс")]
+        public decimal Rate { get; set; }
+
         [Display(Name = "Товари")]
         public List<Product> Products { get; set; }
 	}

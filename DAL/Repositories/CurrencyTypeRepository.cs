@@ -7,23 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-	public class CurrencyTypeRepository : ICurrencyTypeRepository
-	{
-        private readonly ProductManagerDbContext context;
-
+	public class CurrencyTypeRepository : Repository<CurrencyType>, ICurrencyTypeRepository
+    {
         public CurrencyTypeRepository(ProductManagerDbContext context)
-		{
-			this.context = context;
-		}
-
-        public async Task<IEnumerable<CurrencyType>> GetAllAsync()
+            : base(context)
         {
-            return await context.CurrencyTypes.ToListAsync();
-        }
-
-        public async Task<CurrencyType> GetByIdAsync(int id)
-        {
-            return await context.CurrencyTypes.FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }

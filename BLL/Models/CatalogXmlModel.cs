@@ -17,6 +17,10 @@ namespace BLL.Models
         [XmlElement("company")]
         public string ShopName { get; set; }
 
+        [XmlArray("currencies")]
+        [XmlArrayItem("currency")]
+        public List<CurrencyTypeXmlModel> CurrencyTypes { get; set; }
+
         [XmlArray("categories")]
         [XmlArrayItem("category")]
         public List<CategoryXmlModel> Categories { get; set; }
@@ -76,6 +80,16 @@ namespace BLL.Models
         public string Title { get; set; }
     }
 
+    [XmlRoot("currency")]
+    public class CurrencyTypeXmlModel
+    {
+        [XmlAttribute("id")]
+        public int Id { get; set; }
+        [XmlText]
+        public string Name { get; set; }
+        [XmlAttribute("rate")]
+        public decimal Rate { get; set; }
+    }
 
 }
 

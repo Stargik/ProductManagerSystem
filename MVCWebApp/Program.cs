@@ -41,6 +41,7 @@ public class Program
 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddTransient<IManufacturerService, ManufacturerService>();
+        builder.Services.AddTransient<ICurrencyTypeService, CurrencyTypeService>();
         builder.Services.AddTransient<IProductService, ProductService>();
 
         if (builder.Configuration[SettingStrings.ImagesSetting] == "blob")

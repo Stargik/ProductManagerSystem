@@ -27,6 +27,8 @@
     <None Remove="Areas\Admin\Views\Subscription\" />
     <None Remove="Helpers\" />
     <None Remove="Filters\" />
+    <None Remove="Areas\Admin\Views\CurrencyTypes\" />
+    <None Remove="Views\СurrencyTypes\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.1" />
@@ -74,6 +76,8 @@
     <Folder Include="Helpers\" />
     <Folder Include="Filters\" />
     <Folder Include="wwwroot\Media\" />
+    <Folder Include="Areas\Admin\Views\CurrencyTypes\" />
+    <Folder Include="Views\СurrencyTypes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\Media\" />
