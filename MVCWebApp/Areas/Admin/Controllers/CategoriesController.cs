@@ -51,7 +51,7 @@ namespace MVCWebApp.Areas.Admin.Controllers
         // POST: Manufacturers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Title,RozetkaId")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace MVCWebApp.Areas.Admin.Controllers
         // POST: Manufacturers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,RozetkaId")] Category category)
         {
             if (id != category.Id)
             {
