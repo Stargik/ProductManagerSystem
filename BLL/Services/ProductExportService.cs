@@ -41,7 +41,8 @@ namespace BLL.Services
 
         private async Task WriteDefaultXmlAsync(Stream stream, IEnumerable<Product> entities)
         {
-            var catalogXmlModel = new CatalogXmlModel {
+            var shopXmlModel = new ShopXmlModel
+            {
                 Products = new List<ProductXmlModel>(),
                 Categories = new List<CategoryXmlModel>(),
                 CurrencyTypes = new List<CurrencyTypeXmlModel>()
@@ -49,19 +50,25 @@ namespace BLL.Services
 
             foreach (var item in entities)
             {
-                catalogXmlModel.Products.Add(await ToProductXmlModelAsync(item));
-                if (!catalogXmlModel.Categories.Exists(c => c.Id == item.CategoryId))
+                shopXmlModel.Products.Add(await ToProductXmlModelAsync(item));
+                if (!shopXmlModel.Categories.Exists(c => c.Id == item.CategoryId))
                 {
                     var categoryXmlModel = new CategoryXmlModel { Id = item.Category.Id, Title = item.Category.Title };
-                    catalogXmlModel.Categories.Add(categoryXmlModel);
+                    shopXmlModel.Categories.Add(categoryXmlModel);
                 }
 
-                if (!catalogXmlModel.CurrencyTypes.Exists(c => c.Id == item.CurrencyTypeId))
+                if (!shopXmlModel.CurrencyTypes.Exists(c => c.Id == item.CurrencyTypeId))
                 {
                     var currencyTypeXmlModel = new CurrencyTypeXmlModel { Id = item.CurrencyType.Id, Name = item.CurrencyType.Name, Rate = item.CurrencyType.Rate };
-                    catalogXmlModel.CurrencyTypes.Add(currencyTypeXmlModel);
+                    shopXmlModel.CurrencyTypes.Add(currencyTypeXmlModel);
                 }
             }
+
+            var catalogXmlModel = new CatalogXmlModel
+            {
+                Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
+                Shop = shopXmlModel
+            };
 
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
@@ -71,7 +78,7 @@ namespace BLL.Services
 
         private async Task WriteRozetkaXmlAsync(Stream stream, IEnumerable<Product> entities)
         {
-            var shopRozetkaXmlModel = new ShopRozetkaXmlModel
+            var shopXmlModel = new ShopXmlModel
             {
                 Products = new List<ProductXmlModel>(),
                 Categories = new List<CategoryXmlModel>(),
@@ -95,109 +102,44 @@ namespace BLL.Services
                     characteristic.ValueNumber = $"{characteristic.ValueNumber} {characteristic.UnitType}";
                 }
 
-                shopRozetkaXmlModel.Products.Add(await ToProductXmlModelAsync(item));
+                shopXmlModel.Products.Add(await ToProductXmlModelAsync(item));
 
-                if (!shopRozetkaXmlModel.Categories.Exists(c => c.Id == item.CategoryId))
+                if (!shopXmlModel.Categories.Exists(c => c.Id == item.CategoryId))
                 {
                     var categoryXmlModel = new CategoryXmlModel { Id = item.Category.Id, Title = item.Category.Title, RozetkaId = item.Category.RozetkaId };
-                    shopRozetkaXmlModel.Categories.Add(categoryXmlModel);
+                    shopXmlModel.Categories.Add(categoryXmlModel);
                 }
 
-                if (!shopRozetkaXmlModel.CurrencyTypes.Exists(c => c.Id == item.CurrencyTypeId))
+                if (!shopXmlModel.CurrencyTypes.Exists(c => c.Id == item.CurrencyTypeId))
                 {
                     var currencyTypeXmlModel = new CurrencyTypeXmlModel { Id = item.CurrencyType.Id, Name = item.CurrencyType.Name, Rate = item.CurrencyType.Rate };
-                    shopRozetkaXmlModel.CurrencyTypes.Add(currencyTypeXmlModel);
+                    shopXmlModel.CurrencyTypes.Add(currencyTypeXmlModel);
                 }
             }
 
-            var catalogRozetkaXmlModel = new CatalogRozetkaXmlModel
+            var catalogRozetkaXmlModel = new CatalogXmlModel
             {
                 Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
-                Shop = shopRozetkaXmlModel
+                Shop = shopXmlModel
             };
 
             XmlAttributeOverrides xOver = new XmlAttributeOverrides();
-            XmlAttributes attrs = new XmlAttributes();
 
-            attrs = new XmlAttributes();
-            XmlAttributeAttribute xAttribute = new XmlAttributeAttribute("rz_id");
-            attrs.XmlAttribute = xAttribute;
-            xOver.Add(typeof(CategoryXmlModel), "RozetkaId", attrs);
+            await RozetkaCatalogOverridingConfigure(xOver);
 
-            attrs = new XmlAttributes();
-            attrs.XmlIgnore = true;
-            xOver.Add(typeof(CurrencyTypeXmlModel), "Id", attrs);
+            await RozetkaShopOverridingConfigure(xOver);
 
-            attrs = new XmlAttributes();
-            xAttribute = new XmlAttributeAttribute("id");
-            attrs.XmlAttribute = xAttribute;
-            xOver.Add(typeof(CurrencyTypeXmlModel), "Name", attrs);
+            await RozetkaCategoryOverridingConfigure(xOver);
 
-            attrs = new XmlAttributes();
-            XmlArrayAttribute xArray = new XmlArrayAttribute("offers");
-            attrs.XmlArray = xArray;
-            XmlArrayItemAttribute xArrItemElement = new XmlArrayItemAttribute("offer");
-            attrs.XmlArrayItems.Add(xArrItemElement);
-            xOver.Add(typeof(ShopRozetkaXmlModel), "Products", attrs);
+            await RozetkaCurrencyTypeOverridingConfigure(xOver);
 
-            attrs = new XmlAttributes();
-            XmlElementAttribute xElement = new XmlElementAttribute("name");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "Title", attrs);
+            await RozetkaProductOverridingConfigure(xOver);
 
-            attrs = new XmlAttributes();
-            xElement = new XmlElementAttribute("categoryId");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "Category", attrs);
-
-            attrs = new XmlAttributes();
-            xElement = new XmlElementAttribute("vendor");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "Manufacturer", attrs);
-
-            attrs = new XmlAttributes();
-            xElement = new XmlElementAttribute("param");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "Characteristics", attrs);
-
-            attrs = new XmlAttributes();
-            xElement = new XmlElementAttribute("currencyId");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "CurrencyType", attrs);
-
-            attrs = new XmlAttributes();
-            xElement = new XmlElementAttribute("picture");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "MainImage", attrs);
-
-            attrs = new XmlAttributes();
-            xElement = new XmlElementAttribute("article");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "ManufacturerCode", attrs);
-
-            attrs = new XmlAttributes();
-            attrs.XmlIgnore = false;
-            xElement = new XmlElementAttribute("stock_quantity");
-            attrs.XmlElements.Add(xElement);
-            xOver.Add(typeof(ProductXmlModel), "StockQuantity", attrs);
-
-            attrs = new XmlAttributes();
-            xAttribute = new XmlAttributeAttribute("available");
-            attrs.XmlAttribute = xAttribute;
-            xOver.Add(typeof(ProductXmlModel), "StockStatus", attrs);
-
-            attrs = new XmlAttributes();
-            xAttribute = new XmlAttributeAttribute("name");
-            attrs.XmlAttribute = xAttribute;
-            xOver.Add(typeof(CharacteristicXmlModel), "Name", attrs);
-
-            attrs = new XmlAttributes();
-            attrs.XmlIgnore = true;
-            xOver.Add(typeof(CharacteristicXmlModel), "UnitType", attrs);
+            await RozetkaCharacteristicOverridingConfigure(xOver);
 
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CatalogRozetkaXmlModel), xOver);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CatalogXmlModel), xOver);
             xmlSerializer.Serialize(stream, catalogRozetkaXmlModel, ns);
         }
 
@@ -240,6 +182,105 @@ namespace BLL.Services
             }
 
             return productXmlModel;
+        }
+
+        private async Task RozetkaCatalogOverridingConfigure(XmlAttributeOverrides xOver)
+        {
+            XmlAttributes attrs = new XmlAttributes();
+            XmlRootAttribute xRootAttribute = new XmlRootAttribute("yml_catalog");
+            attrs.XmlRoot = xRootAttribute;
+            xOver.Add(typeof(CatalogXmlModel), attrs);
+        }
+
+        private async Task RozetkaShopOverridingConfigure(XmlAttributeOverrides xOver)
+        {
+            XmlAttributes attrs = new XmlAttributes();
+            XmlArrayAttribute xArray = new XmlArrayAttribute("offers");
+            attrs.XmlArray = xArray;
+            XmlArrayItemAttribute xArrItemElement = new XmlArrayItemAttribute("offer");
+            attrs.XmlArrayItems.Add(xArrItemElement);
+            xOver.Add(typeof(ShopXmlModel), "Products", attrs);
+        }
+
+        private async Task RozetkaCategoryOverridingConfigure(XmlAttributeOverrides xOver)
+        {
+            XmlAttributes attrs = new XmlAttributes();
+            XmlAttributeAttribute xAttribute = new XmlAttributeAttribute("rz_id");
+            attrs.XmlAttribute = xAttribute;
+            xOver.Add(typeof(CategoryXmlModel), "RozetkaId", attrs);
+        }
+
+        private async Task RozetkaCurrencyTypeOverridingConfigure(XmlAttributeOverrides xOver)
+        {
+            XmlAttributes attrs = new XmlAttributes();
+            attrs.XmlIgnore = true;
+            xOver.Add(typeof(CurrencyTypeXmlModel), "Id", attrs);
+
+            attrs = new XmlAttributes();
+            XmlAttributeAttribute xAttribute = new XmlAttributeAttribute("id");
+            attrs.XmlAttribute = xAttribute;
+            xOver.Add(typeof(CurrencyTypeXmlModel), "Name", attrs);
+        }
+
+        private async Task RozetkaCharacteristicOverridingConfigure(XmlAttributeOverrides xOver)
+        {
+            XmlAttributes attrs = new XmlAttributes();
+            XmlAttributeAttribute xAttribute = new XmlAttributeAttribute("name");
+            attrs.XmlAttribute = xAttribute;
+            xOver.Add(typeof(CharacteristicXmlModel), "Name", attrs);
+
+            attrs = new XmlAttributes();
+            attrs.XmlIgnore = true;
+            xOver.Add(typeof(CharacteristicXmlModel), "UnitType", attrs);
+        }
+
+        private async Task RozetkaProductOverridingConfigure(XmlAttributeOverrides xOver)
+        {
+            XmlAttributes attrs = new XmlAttributes();
+            XmlElementAttribute xElement = new XmlElementAttribute("name");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "Title", attrs);
+
+            attrs = new XmlAttributes();
+            xElement = new XmlElementAttribute("categoryId");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "Category", attrs);
+
+            attrs = new XmlAttributes();
+            xElement = new XmlElementAttribute("vendor");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "Manufacturer", attrs);
+
+            attrs = new XmlAttributes();
+            xElement = new XmlElementAttribute("param");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "Characteristics", attrs);
+
+            attrs = new XmlAttributes();
+            xElement = new XmlElementAttribute("currencyId");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "CurrencyType", attrs);
+
+            attrs = new XmlAttributes();
+            xElement = new XmlElementAttribute("picture");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "MainImage", attrs);
+
+            attrs = new XmlAttributes();
+            xElement = new XmlElementAttribute("article");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "ManufacturerCode", attrs);
+
+            attrs = new XmlAttributes();
+            attrs.XmlIgnore = false;
+            xElement = new XmlElementAttribute("stock_quantity");
+            attrs.XmlElements.Add(xElement);
+            xOver.Add(typeof(ProductXmlModel), "StockQuantity", attrs);
+
+            attrs = new XmlAttributes();
+            XmlAttributeAttribute xAttribute = new XmlAttributeAttribute("available");
+            attrs.XmlAttribute = xAttribute;
+            xOver.Add(typeof(ProductXmlModel), "StockStatus", attrs);
         }
     }
 }

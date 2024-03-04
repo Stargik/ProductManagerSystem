@@ -11,6 +11,16 @@ namespace BLL.Models
     [XmlRoot("catalog")]
     public class CatalogXmlModel
     {
+        [XmlAttribute("date")]
+        public string Date { get; set; }
+
+        [XmlElement("shop")]
+        public ShopXmlModel Shop { get; set; }
+    }
+
+    [XmlRoot("shop")]
+    public class ShopXmlModel
+    {
         [XmlArray("currencies")]
         [XmlArrayItem("currency")]
         public List<CurrencyTypeXmlModel> CurrencyTypes { get; set; }
@@ -21,33 +31,6 @@ namespace BLL.Models
 
         [XmlArray("products")]
         [XmlArrayItem("product")]
-        public List<ProductXmlModel> Products { get; set; }
-    }
-
-
-    [XmlRoot("yml_catalog")]
-    public class CatalogRozetkaXmlModel
-    {
-        [XmlAttribute("date")]
-        public string Date { get; set; }
-
-        [XmlElement("shop")]
-        public ShopRozetkaXmlModel Shop { get; set; }
-    }
-
-    [XmlRoot("shop")]
-    public class ShopRozetkaXmlModel
-    {
-        [XmlArray("currencies")]
-        [XmlArrayItem("currency")]
-        public List<CurrencyTypeXmlModel> CurrencyTypes { get; set; }
-
-        [XmlArray("categories")]
-        [XmlArrayItem("category")]
-        public List<CategoryXmlModel> Categories { get; set; }
-
-        [XmlArray("offers")]
-        [XmlArrayItem("offer")]
         public List<ProductXmlModel> Products { get; set; }
     }
 
