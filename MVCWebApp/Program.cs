@@ -26,11 +26,13 @@ public class Program
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddDbContext<ProductManagerDbContext>(option =>
-            option.UseSqlServer(builder.Configuration.GetConnectionString(SettingStrings.ProductManagerDbConnection))
+            option.UseSqlServer(builder.Configuration.GetConnectionString(SettingStrings.ProductManagerDbConnection),
+            providerOptions => providerOptions.EnableRetryOnFailure())
         );
 
         builder.Services.AddDbContext<ProductManagerIdentityDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString(SettingStrings.IdentityProductManagerDbConnection))
+            options.UseSqlServer(builder.Configuration.GetConnectionString(SettingStrings.IdentityProductManagerDbConnection),
+            providerOptions => providerOptions.EnableRetryOnFailure())
         );
 
         builder.Services.Configure<StaticFilesSettings>(builder.Configuration.GetSection(SettingStrings.StaticFilesSection));
