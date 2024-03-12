@@ -2,11 +2,12 @@
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using BLL.Configuration;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace BLL.Configuration
+namespace BLL.Services
 {
 	public class BlobStorageImageService : IImageService
 	{
