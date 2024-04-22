@@ -1,0 +1,31 @@
+﻿body {
+    background-image: url('/Media/LoginBackground.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.background-wrapper {
+    backdrop-filter: blur(4px);
+    min-height: 93vh;
+}
+
+.login-main-row {
+    min-height: 80vh;
+    align-content: center;
+}
+
+.login-section {
+    background-color: white;
+    padding: 30px;
+}
+
+.login-logo-img {
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+main {
+    background: none;
+    padding: 0;
+}

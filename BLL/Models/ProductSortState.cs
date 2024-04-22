@@ -8,7 +8,13 @@ namespace BLL.Models
 		TitleDesc,
 		ManufacturerCodeAsc,
 		ManufacturerCodeDesc,
-		PriceAsc,
+        CategoryAsc,
+        CategoryDesc,
+        ManufacturerAsc,
+        ManufacturerDesc,
+        StockStatusAsc,
+        StockStatusDesc,
+        PriceAsc,
 		PriceDesc
 	}
 }

@@ -1,4 +1,8 @@
-﻿@{
+﻿@using MVCWebApp.Areas.Admin.Models
+
+@model SubscriptionSettingsModel
+
+@{
     ViewData["Title"] = "Автоматичне надсилання каталогу";
     ViewData["StatusMessage"] = TempData["StatusMessage"];
     ViewData["ErrorMessage"] = TempData["ErrorMessage"];
@@ -12,12 +16,20 @@
     <a class="btn btn-outline-dark" asp-action="Index">Скасувати</a>
 </div>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" id="editForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label for="CronString" class="control-label">Налаштування у форматі CRON: </label>
-                <input type="text" id="CronString" name="CronString" class="form-control" placeholder="* * * * *" />
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PeriodType" class="control-label"></label>
+                <select name="PeriodType" class="form-select" id="portType" asp-items="Html.GetEnumSelectList<PeriodType>()"></select>
+                <span asp-validation-for="PeriodType" class="text-danger"></span>
             </div>
         </form>
     </div>

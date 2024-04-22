@@ -21,75 +21,88 @@
         <select asp-for="SearchManufacturerId" id="SearchManufacturerId" name="SearchManufacturerId" class="form-select" asp-items="ViewBag.ManufacturerId"></select>
     </div>
     <div class="col-auto">
-        <input type="submit" form="filterForm" value="Знайти" class="btn btn-secondary" />
+        <input type="submit" form="filterForm" value="Знайти" class="btn btn-dark" />
     </div>
 </form>
-
-<table class="table align-middle productTable">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => product.MainImage)
-            </th>
-            <th>
-                <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortTitle"
-                                     search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
-                    @Html.DisplayNameFor(model => product.Title)
-                </sort-product-header>
-            </th>
-            <th>
-                <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortManufacturerCode"
-                                     search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
-                    @Html.DisplayNameFor(model => product.ManufacturerCode)
-                </sort-product-header>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => product.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => product.Manufacturer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => product.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => product.StockStatus)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Products)
-        {
+<div class="table-responsive">
+    <table class="table align-middle table-borderless productTable mt-3">
+        <thead>
             <tr>
-                <td>
-                    <img src="@(ViewData["ImageStoragePath"] + "/" + item.MainImage.Path)" asp-append-version="true">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ManufacturerCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Manufacturer.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.CurrencyType.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StockStatus.Name)
-                </td>
-                <td class="text-end">
-                    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => product.MainImage)
+                </th>
+                <th>
+                    <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortTitle"
+                                         search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                        @Html.DisplayNameFor(model => product.Title)
+                    </sort-product-header>
+                </th>
+                <th>
+                    <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortManufacturerCode"
+                                         search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                        @Html.DisplayNameFor(model => product.ManufacturerCode)
+                    </sort-product-header>
+                </th>
+                <th>
+                    <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortCategory"
+                                         search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                        @Html.DisplayNameFor(model => product.Category)
+                    </sort-product-header>
+                </th>
+                <th>
+                    <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortManufacturer"
+                                         search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                        @Html.DisplayNameFor(model => product.Manufacturer)
+                    </sort-product-header>
+                </th>
+                <th>
+                    <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortPrice"
+                                         search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                        @Html.DisplayNameFor(model => product.Price)
+                    </sort-product-header>
+
+                </th>
+                <th>
+                    <sort-product-header class="link-dark" action="Index" up="@Model.SortProductsViewModel.Up" current="@Model.SortProductsViewModel.Current" property="@Model.SortProductsViewModel.SortStockStatus"
+                                         search-title="@Model.SearchTitle" search-category-id="@Model.SearchCategoryId" search-manufacturer-id="@Model.SearchManufacturerId">
+                        @Html.DisplayNameFor(model => product.StockStatus)
+                    </sort-product-header>
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>
+                        <img src="@(ViewData["ImageStoragePath"] + "/" + item.MainImage.Path)" asp-append-version="true">
+                    </td>
+                    <td>
+                        <a class="link-dark link-table-title-dark" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ManufacturerCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Manufacturer.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price) @Html.DisplayFor(modelItem => item.CurrencyType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StockStatus.Name)
+                    </td>
+                    <td class="text-end">
+                        <a class="btn btn-outline-dark" asp-action="Details" asp-route-id="@item.Id">Докладніше</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @if (Model.Products.PageCount > 1)
 {

@@ -5,12 +5,12 @@
     ViewData["Title"] = "Авторизація";
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
-<div class="row justify-content-center">
+<div class="row justify-content-center login-main-row">
     <div class="col-md-6">
-        <section>
+        <section class="login-section">
+            <h1 class="text-center"><img class="login-logo-img" src="~/Media/logoBlack.png" /></h1>
+            <h3>@ViewData["Title"]</h3>
             <form id="account" method="post">
-                <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -33,17 +33,17 @@
                 </div>
                 <div>
                     @*
-                        <p>
-                            <a id="forgot-password" asp-page="./ForgotPassword">Забули пароль?</a>
-                        </p>
+                <p>
+                    <a id="forgot-password" asp-page="./ForgotPassword">Забули пароль?</a>
+                </p>
 
-                        <p>
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                        </p>
+                <p>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                </p>
 
-                        <p>
-                             <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Відправити підтвердження аккаунту на пошту ще раз</a>
-                        </p>
+                <p>
+                     <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Відправити підтвердження аккаунту на пошту ще раз</a>
+                </p>
                     *@
                 </div>
             </form>
@@ -53,4 +53,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+
+@section LoginStyles {
+    <partial name="_CssLoginPartial" />
 }

@@ -7,26 +7,33 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        @if (User.IsInRole(RoleSettings.AdminRole))
-        {
-            <li class="nav-item">
-                <a class="nav-link text-light" asp-area="Admin" asp-controller="Home" asp-action="Index">Панель адміністратора</a>
-            </li>
-        }
-        <li class="nav-item">
-            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Аккаунт</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-light">Вийти</button>
-            </form>
-        </li>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center nav-link link-body-emphasis text-decoration-none text-light dropdown-toggle px-3" data-bs-toggle="dropdown" aria-expanded="false">
+                Аккаунт
+            </a>
+            <ul class="dropdown-menu text-small shadow header-right-dropdown">
+                @if (User.IsInRole(RoleSettings.AdminRole))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Панель адміністратора</a>
+                    </li>
+                }
+                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Налаштування</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item btn btn-link">Вийти</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Увійти</a>
-        </li>
+        <div class="nav-item text-nowrap">
+            <a class="nav-link px-3" asp-area="Identity" asp-page="/Account/Login">Логін</a>
+        </div>
     }
 </ul>
+
 

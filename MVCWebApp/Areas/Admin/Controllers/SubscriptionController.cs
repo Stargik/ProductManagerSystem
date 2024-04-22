@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text;
+using System.Threading;
 using BLL.Interfaces;
 using BLL.Models;
 using BLL.Services;
@@ -10,9 +11,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.FileIO;
+using MVCWebApp.Areas.Admin.Models;
 using MVCWebApp.Areas.Identity.Configuration;
 using MVCWebApp.Areas.Identity.Models;
 using MVCWebApp.Helpers;
+using NuGet.Configuration;
 
 namespace MVCWebApp.Areas.Admin.Controllers
 {
@@ -52,19 +55,44 @@ namespace MVCWebApp.Areas.Admin.Controllers
 
         // POST: SubscriptionController/Edit
         [HttpPost]
-        public async Task<ActionResult> Edit(string CronString)
+        public async Task<ActionResult> Edit(SubscriptionSettingsModel subscriptionSettingsModel)
         {
+
+
+            string cronString = subscriptionSettingsToCron(subscriptionSettingsModel);
+
+            var setterDateTime = subscriptionSettingsModel.StartDate;
+
+            setterDateTime = setterDateTime.AddMinutes(-1);
 
             var subscribers = await userManager.GetUsersInRoleAsync(RoleSettings.SubscriberRole);
             try
             {
-                recurringJobManager.AddOrUpdate("SendCatalogId", () => hangfireHelper.SendCatalogToAllSubscribersJob(), CronString);
+                var monitor = JobStorage.Current.GetMonitoringApi();
+
+                var jobIdsToDelete = monitor.ScheduledJobs(0, int.MaxValue).Where(x => x.Value.Job.Method.Name == nameof(AddSendCatalogAction));
+                foreach (var id in jobIdsToDelete)
+                {
+                    BackgroundJob.Delete(id.Key);
+                }
+                recurringJobManager.RemoveIfExists("SendCatalogId");
+
+                if (setterDateTime < DateTime.Now.AddMinutes(1))
+                {
+                    AddSendCatalogAction(cronString);
+                }
+                else
+                {
+                    var dateTimeOffset = new DateTimeOffset(setterDateTime);
+                    var jobId = BackgroundJob.Schedule(() => AddSendCatalogAction(cronString), dateTimeOffset);
+                }
+
                 TempData["StatusMessage"] = "Автоматичне відправлення каталогу успішно налаштовано.";
 
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Помилка. Неправильне значення CRON.";
+                TempData["ErrorMessage"] = "Помилка. Неправильне значення.";
 
             }
 
@@ -77,7 +105,16 @@ namespace MVCWebApp.Areas.Admin.Controllers
         {
             try
             {
+                var monitor = JobStorage.Current.GetMonitoringApi();
+
+                var jobIdsToDelete = monitor.ScheduledJobs(0, int.MaxValue).Where(x => x.Value.Job.Method.Name == nameof(AddSendCatalogAction));
+                foreach (var id in jobIdsToDelete)
+                {
+                    BackgroundJob.Delete(id.Key);
+                }
+
                 recurringJobManager.RemoveIfExists("SendCatalogId");
+
                 TempData["StatusMessage"] = "Автоматичне відправлення каталогу вимкнено.";
 
 
@@ -127,6 +164,40 @@ namespace MVCWebApp.Areas.Admin.Controllers
 
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        private string subscriptionSettingsToCron(SubscriptionSettingsModel settings)
+        {
+            string cronString;
+            switch (settings.PeriodType)
+            {
+                case PeriodType.Daily:
+                    cronString = Cron.Daily(settings.StartDate.Hour, settings.StartDate.Minute);
+                    break;
+                case PeriodType.Weekly:
+                    cronString = Cron.Weekly(settings.StartDate.DayOfWeek, settings.StartDate.Hour, settings.StartDate.Minute);
+                    break;
+                case PeriodType.Monthly:
+                    cronString = Cron.Monthly(settings.StartDate.Day, settings.StartDate.Hour, settings.StartDate.Minute);
+                    break;
+                case PeriodType.Yearly:
+                    cronString = Cron.Yearly(settings.StartDate.Month, settings.StartDate.Day, settings.StartDate.Hour, settings.StartDate.Minute);
+                    break;
+                default:
+                    cronString = Cron.Never();
+                    break;
+            }
+            return cronString;
+        }
+
+        public void AddSendCatalogAction(string cronString)
+        {
+            RecurringJobOptions options = new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            };
+
+            recurringJobManager.AddOrUpdate("SendCatalogId", () => hangfireHelper.SendCatalogToAllSubscribersJob(), cronString, options);
         }
 
     }

@@ -52,6 +52,7 @@ namespace MVCWebApp.Helpers
 
             var sendedEmails = await subscriptionService.SendCatalogAsync(subscribers, catalog);
         }
+
     }
 }
 

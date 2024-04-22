@@ -218,8 +218,14 @@ namespace BLL.Services
                 ProductSortState.TitleDesc => products.OrderByDescending(p => p.Title),
                 ProductSortState.ManufacturerCodeAsc => products.OrderBy(p => p.ManufacturerCode),
                 ProductSortState.ManufacturerCodeDesc => products.OrderByDescending(p => p.ManufacturerCode),
-                ProductSortState.PriceAsc => products.OrderBy(p => p.Price),
-                ProductSortState.PriceDesc => products.OrderByDescending(p => p.Price),
+                ProductSortState.CategoryAsc => products.OrderBy(p => p.Category.Title),
+                ProductSortState.CategoryDesc => products.OrderByDescending(p => p.Category.Title),
+                ProductSortState.ManufacturerAsc => products.OrderBy(p => p.Manufacturer.Name),
+                ProductSortState.ManufacturerDesc => products.OrderByDescending(p => p.Manufacturer.Name),
+                ProductSortState.PriceAsc => products.OrderBy(p => p.Price * p.CurrencyType.Rate),
+                ProductSortState.PriceDesc => products.OrderByDescending(p => p.Price * p.CurrencyType.Rate),
+                ProductSortState.StockStatusAsc => products.OrderBy(p => p.StockStatusId),
+                ProductSortState.StockStatusDesc => products.OrderByDescending(p => p.StockStatusId),
                 _ => products.OrderBy(p => p.Id)
             };
             return products;

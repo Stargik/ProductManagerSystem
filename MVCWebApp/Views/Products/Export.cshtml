@@ -8,19 +8,30 @@
 
 <h1 class="mb-4">@ViewData["Title"]</h1>
 
-<hr />
-<div class="btn-group btn-group-sm" role="group">
-    <input type="submit" form="exportForm" value="Експорт" class="btn btn-outline-dark" />
-</div>
-<hr />
 <form asp-action="ExportXml" id="exportForm" class="row g-3">
     <div class="form-group col-6">
         <label for="categoryIds" class="form-label">Оберіть категорії:</label>
-        <select name="categoryIds" class="form-select" multiple="" id="categoryIds" asp-items="ViewBag.CategoryId"></select>
+        <fieldset class="list-group formCheckboxList">
+            @foreach (var categoryId in ViewBag.CategoryId)
+            {
+                <div class="list-group-item @(categoryId.Value == "-1" ? "list-group-item-dark" : "")">
+                    <input type="checkbox" name="categoryIds" value="@categoryId.Value" class="form-check-input" />
+                    <label class="form-check-label">@categoryId.Text</label>
+                </div>
+            }
+        </fieldset>
     </div>
     <div class="form-group col-6">
         <label for="manufacturerIds" class="form-label">Оберіть бренди:</label>
-        <select name="manufacturerIds" class="form-select" multiple="" id="manufacturerIds" asp-items="ViewBag.ManufacturerId"></select>
+        <fieldset class="list-group formCheckboxList">
+            @foreach (var manufacturerId in ViewBag.ManufacturerId)
+            {
+                <div class="list-group-item @(manufacturerId.Value == "-1" ? "list-group-item-dark" : "")">
+                    <input type="checkbox" name="manufacturerIds" value="@manufacturerId.Value" class="form-check-input" />
+                    <label class="form-check-label">@manufacturerId.Text</label>
+                </div>
+            }
+        </fieldset>
     </div>
     <div class="form-group col-4">
         <label for="portType" class="form-label">Оберіть тип експорту:</label>
@@ -28,4 +39,11 @@
     </div>
 </form>
 
+<div class="btn-group btn-group-sm mt-3" role="group">
+    <input type="submit" form="exportForm" value="Експорт" class="btn btn-dark" />
+</div>
 
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/checkboxList.js"></script>
+}

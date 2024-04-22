@@ -12,7 +12,7 @@ namespace DAL.Entities
         public decimal Rate { get; set; }
 
         [Display(Name = "Товари")]
-        public List<Product> Products { get; set; }
+        public List<Product>? Products { get; set; }
 	}
 }
 

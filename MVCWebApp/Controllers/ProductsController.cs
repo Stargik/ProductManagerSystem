@@ -106,6 +106,9 @@ namespace MVCWebApp.Controllers
             var categories = (await productService.GetAllCategoriesAsync()).ToList();
             var manufacturers = (await manufacturerService.GetAllAsync()).ToList();
 
+            categories.Insert(0, new Category { Id = -1, Title = "Всі категорії" });
+            manufacturers.Insert(0, new Manufacturer { Id = -1, Name = "Всі бренди" });
+
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Title");
             ViewData["ManufacturerId"] = new SelectList(manufacturers, "Id", "Name");
 
@@ -116,6 +119,9 @@ namespace MVCWebApp.Controllers
         public async Task<ActionResult> ExportXml(List<int> categoryIds, List<int> manufacturerIds, string contentType = "application/xml", PortType portType = PortType.Default)
         {
             var exportService = productDataServiceFactory.GetExportService(contentType);
+
+            categoryIds.Remove(-1);
+            manufacturerIds.Remove(-1);
 
             using (var stream = new MemoryStream())
             {
