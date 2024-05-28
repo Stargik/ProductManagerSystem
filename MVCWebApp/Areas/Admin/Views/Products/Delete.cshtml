@@ -25,7 +25,7 @@
         <div class="col-md-4">
             @if (Model.Characteristics.Count != 0)
             {
-                <h6>Characteristics</h6>
+                <h6>Характеристики</h6>
                 <ul class="list-group">
                     @foreach (Characteristic item in Model.Characteristics)
                     {
@@ -35,7 +35,7 @@
             }
         </div>
         <div class="col-md-4">
-            <h6>General information</h6>
+            <h6>Загальна інформація</h6>
             <ul class="list-group">
                 <li class="list-group-item">@Html.DisplayNameFor(model => model.ManufacturerCode): @Html.DisplayFor(model => model.ManufacturerCode)</li>
                 <li class="list-group-item">@Html.DisplayNameFor(model => model.Price): @Html.DisplayFor(model => model.Price) @Html.DisplayFor(model => model.CurrencyType.Name)</li>

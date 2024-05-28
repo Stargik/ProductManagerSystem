@@ -139,7 +139,7 @@ namespace MVCWebApp.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("Image", ex.Message);
-                TempData["ErrorMessage"] = "Помилка. Зображення з такою назвою вже існує.";
+                TempData["ErrorMessage"] = "Помилка. Перевірте коректність даних та унікальність назви зображення.";
             }
 
             var categories = await productService.GetAllCategoriesAsync();
@@ -204,7 +204,7 @@ namespace MVCWebApp.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("Image", ex.Message);
-                TempData["ErrorMessage"] = "Помилка. Зображення з такою назвою вже існує.";
+                TempData["ErrorMessage"] = "Помилка. Перевірте коректність даних та унікальність назви зображення.";
             }
 
             return View(productDTO);

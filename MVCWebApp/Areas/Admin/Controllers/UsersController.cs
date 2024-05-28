@@ -100,7 +100,15 @@ namespace MVCWebApp.Areas.Admin.Controllers
 
                 }
             }
-            TempData["ErrorMessage"] = "Помилка. Користувач з цією поштою та/або логіном вже існує.";
+            if ((await userManager.FindByEmailAsync(registerUserViewModel.Email)) is not null || (registerUserViewModel.Name is not null && (await userManager.FindByNameAsync(registerUserViewModel.Name)) is not null))
+            {
+                TempData["ErrorMessage"] = "Помилка. Користувач з цією поштою та/або логіном вже існує.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Помилка. Перевірте коректність даних.";
+            }
+                
 
             var allRoles = roleManager.Roles;
             ViewData["roles"] = allRoles;
